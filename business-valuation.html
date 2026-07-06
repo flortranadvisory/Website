@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Valuation — Flortran Advisory & Consulting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --gold:#C49A2A;--gold-light:#E8C55A;--gold-muted:#A07E22;
+      --navy:#0E1A2B;--navy-mid:#162338;--navy-light:#243350;
+      --cream:#FAF7F2;--white:#fff;
+      --text:#0E1A2B;--text-mid:#3D4F66;--text-light:#6B7E96;
+      --border:rgba(196,154,42,0.18);--border-soft:rgba(14,26,43,0.08);
+      --green:#2E9E5B;
+      --font-display:'Cormorant Garamond',serif;
+      --font-body:'DM Sans',sans-serif;
+      --ease:cubic-bezier(0.16,1,0.3,1);
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-body);background:var(--cream);color:var(--text);overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.4}
+
+    #prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light));z-index:9999;width:0%;transition:width .1s}
+    .cur,.cur-r{position:fixed;border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
+    .cur{width:10px;height:10px;background:var(--gold)}
+    .cur-r{width:36px;height:36px;border:1.5px solid rgba(196,154,42,.5);transition:width .3s var(--ease),height .3s var(--ease)}
+    body:has(a:hover) .cur-r,body:has(button:hover) .cur-r{width:52px;height:52px}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:72px;background:rgba(250,247,242,.85);backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid var(--border);transition:box-shadow .3s,background .3s}
+    nav.scrolled{box-shadow:0 4px 32px rgba(14,26,43,.08);background:rgba(250,247,242,.97)}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .logo-img{height:38px;width:auto;object-fit:contain;display:block}
+    .logo-text{display:flex;flex-direction:column;line-height:1}
+    .logo-name{font-family:var(--font-display);font-size:1.35rem;font-weight:700;color:var(--navy);letter-spacing:.06em}
+    .logo-tag{font-size:.55rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;font-weight:500;margin-top:2px}
+    .nav-links{display:flex;align-items:center;gap:2.2rem;list-style:none}
+    .nav-links a{text-decoration:none;font-size:.875rem;font-weight:450;color:var(--text-mid);position:relative;transition:color .2s}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1.5px;background:var(--gold);transition:width .25s var(--ease)}
+    .nav-links a:hover{color:var(--navy)}
+    .nav-links a:hover::after,.nav-links a.active::after{width:100%}
+    .nav-links a.active{color:var(--navy)}
+    .btn{display:inline-flex;align-items:center;gap:8px;border-radius:4px;font-family:var(--font-body);font-size:.875rem;font-weight:600;letter-spacing:.02em;cursor:pointer;text-decoration:none;transition:background .2s,transform .15s,box-shadow .2s;border:none}
+    .btn svg{width:15px;height:15px}
+    .btn-gold{background:var(--gold);color:var(--white);padding:10px 22px}
+    .btn-gold:hover{background:var(--gold-muted);transform:translateY(-1px);box-shadow:0 6px 24px rgba(196,154,42,.35)}
+    .btn-outline{background:transparent;color:var(--navy);border:1.5px solid var(--border);padding:12px 24px}
+    .btn-outline:hover{border-color:var(--gold);background:rgba(196,154,42,.05)}
+    .btn-lg{padding:14px 28px;font-size:.92rem}
+
+    /* HERO */
+    .hero{margin-top:72px;padding:70px 5% 56px;display:grid;grid-template-columns:1fr 1.12fr;gap:54px;align-items:start;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;top:-30%;left:-8%;width:520px;height:520px;background:radial-gradient(circle,rgba(196,154,42,.07) 0%,transparent 70%);pointer-events:none}
+    .eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:.72rem;letter-spacing:.25em;font-weight:600;color:var(--gold);text-transform:uppercase;margin-bottom:22px}
+    .eyebrow::after{content:'';width:40px;height:1px;background:var(--gold)}
+    .hero-h1{font-family:var(--font-display);font-size:clamp(2.5rem,4.8vw,4rem);font-weight:600;line-height:1.06;color:var(--navy);margin-bottom:22px}
+    .hero-sub{font-size:1rem;line-height:1.75;color:var(--text-mid);max-width:460px;font-weight:300;margin-bottom:30px}
+    .hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+
+    /* VALUATION CARD */
+    .valcard{background:var(--white);border:1px solid var(--border-soft);border-radius:16px;box-shadow:0 8px 48px rgba(14,26,43,.07);padding:30px 32px}
+    .vc-top{display:grid;grid-template-columns:1fr 1.15fr;gap:36px;padding-bottom:26px;border-bottom:1px solid var(--border-soft)}
+    .vc-label{font-size:.66rem;letter-spacing:.16em;font-weight:600;text-transform:uppercase;color:var(--text-light);margin-bottom:12px}
+    .vc-big{font-family:var(--font-display);font-size:3rem;font-weight:600;color:var(--navy);line-height:1}
+    .vc-delta{font-size:.82rem;margin-top:8px;color:var(--text-light)}
+    .vc-delta strong{color:var(--green);font-weight:600}
+    .vc-range-label{display:flex;align-items:center;gap:8px;font-size:.66rem;letter-spacing:.12em;font-weight:600;text-transform:uppercase;color:var(--text-light);margin-bottom:18px}
+    .vc-slider{position:relative;height:4px;background:linear-gradient(90deg,var(--border-soft),var(--gold-light),var(--gold));border-radius:2px;margin:0 4px 14px}
+    .vc-knob{position:absolute;top:50%;left:50%;width:14px;height:14px;border-radius:50%;background:var(--gold);border:3px solid var(--white);box-shadow:0 1px 6px rgba(196,154,42,.5);transform:translate(-50%,-50%)}
+    .vc-range-vals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:left}
+    .vc-range-vals .col:nth-child(2){text-align:center}
+    .vc-range-vals .col:nth-child(3){text-align:right}
+    .vc-rv-lab{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-light);margin-bottom:3px}
+    .vc-rv-val{font-family:var(--font-display);font-size:1.05rem;color:var(--navy);font-weight:600}
+    .vc-body{display:grid;grid-template-columns:1fr 1.1fr;gap:34px;padding-top:24px}
+    .vc-sec-label{font-size:.62rem;letter-spacing:.14em;font-weight:600;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+    .driver{display:grid;grid-template-columns:90px 1fr 32px;gap:10px;align-items:center;margin-bottom:11px;font-size:.74rem}
+    .driver .dn{color:var(--text-mid)}
+    .driver .db{height:5px;background:var(--border-soft);border-radius:3px;overflow:hidden}
+    .driver .df{height:100%;background:linear-gradient(90deg,var(--gold-light),var(--gold));border-radius:3px}
+    .driver .dp{text-align:right;color:var(--navy);font-weight:600}
+    .meth-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .meth{display:flex;align-items:center;gap:9px;padding:11px 13px;border:1px solid var(--border-soft);border-radius:8px;font-size:.76rem;color:var(--navy);font-weight:500;transition:border-color .2s,background .2s}
+    .meth:hover{border-color:var(--gold);background:rgba(196,154,42,.04)}
+    .meth .mi{width:16px;height:16px;color:var(--gold);flex-shrink:0}
+    .meth .mi svg{width:100%;height:100%}
+    .vc-foot{margin-top:24px;padding-top:18px;border-top:1px solid var(--border-soft);text-align:center;font-size:.72rem;color:var(--text-light);letter-spacing:.04em}
+
+    /* FEATURE CARDS */
+    .feat-cards{padding:36px 5% 20px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+    .fc{background:var(--white);border:1px solid var(--border-soft);border-radius:12px;padding:26px 24px;display:flex;gap:16px;align-items:flex-start;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s}
+    .fc:hover{transform:translateY(-4px);box-shadow:0 16px 44px rgba(14,26,43,.1);border-color:rgba(196,154,42,.22)}
+    .fc-icon{width:52px;height:52px;border-radius:50%;border:1.5px solid var(--border);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .fc-icon svg{width:24px;height:24px}
+    .fc h3{font-family:var(--font-display);font-size:1.12rem;font-weight:600;color:var(--navy);margin-bottom:7px}
+    .fc p{font-size:.8rem;line-height:1.55;color:var(--text-light)}
+
+    /* SECTION */
+    .section{padding:56px 5%}
+    .sec-head{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+    .sec-head .bar{width:28px;height:2px;background:var(--gold)}
+    .sec-head h2{font-family:var(--font-display);font-size:clamp(1.7rem,3vw,2.3rem);font-weight:600;color:var(--navy)}
+
+    /* WHAT'S INCLUDED — 9-step timeline */
+    .incl-wrap{background:var(--white);border:1px solid var(--border-soft);border-radius:16px;padding:40px 32px 30px}
+    .incl-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:0}
+    .incl-step{padding:0 12px;text-align:center;position:relative}
+    .incl-ic{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--border);color:var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+    .incl-ic svg{width:18px;height:18px}
+    .incl-step h4{font-size:.74rem;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.25}
+    .incl-step p{font-size:.66rem;line-height:1.45;color:var(--text-light)}
+    .incl-rail{display:grid;grid-template-columns:repeat(9,1fr);margin-top:26px;position:relative}
+    .incl-rail::before{content:'';position:absolute;top:13px;left:5.5%;right:5.5%;height:1px;background:var(--border)}
+    .incl-num{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--gold);background:var(--cream);color:var(--gold);font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto;position:relative;z-index:1}
+    .incl-timeline{text-align:center;margin-top:22px;font-size:.8rem;color:var(--text-mid);font-weight:500}
+
+    /* METHODOLOGIES */
+    .meth-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .mc{background:var(--white);border:1px solid var(--border-soft);border-radius:14px;padding:30px 28px;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s}
+    .mc:hover{transform:translateY(-4px);box-shadow:0 16px 44px rgba(14,26,43,.1);border-color:rgba(196,154,42,.22)}
+    .mc-head{display:flex;gap:18px;align-items:flex-start;margin-bottom:16px}
+    .mc-icon{width:60px;height:60px;border-radius:50%;border:1.5px solid var(--border);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .mc-icon svg{width:28px;height:28px}
+    .mc h3{font-family:var(--font-display);font-size:1.3rem;font-weight:600;color:var(--navy);margin-bottom:8px}
+    .mc p{font-size:.84rem;line-height:1.65;color:var(--text-light)}
+    .mc-link{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--gold);text-decoration:none;margin-top:16px;transition:gap .2s}
+    .mc-link:hover{gap:10px}
+
+    /* BEST SUITED */
+    .suited-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;align-items:stretch}
+    .su-item{padding:8px 30px;display:flex;gap:18px;align-items:flex-start;border-right:1px solid var(--border-soft)}
+    .su-item:first-child{padding-left:0}
+    .su-item:last-child{border-right:none}
+    .su-ic{width:54px;height:54px;border-radius:50%;border:1.5px solid var(--border);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .su-ic svg{width:24px;height:24px}
+    .su-item h3{font-family:var(--font-display);font-size:1.18rem;font-weight:600;color:var(--navy);margin-bottom:7px}
+    .su-item p{font-size:.82rem;line-height:1.6;color:var(--text-light)}
+
+    /* PROCESS */
+    .proc-wrap{background:var(--white);border:1px solid var(--border-soft);border-radius:16px;padding:34px 30px;display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:0;align-items:center}
+    .proc-step{display:flex;gap:16px;align-items:flex-start}
+    .proc-ic{width:50px;height:50px;border-radius:50%;border:1.5px solid var(--border);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .proc-ic svg{width:22px;height:22px}
+    .proc-step .pt{font-size:.62rem;letter-spacing:.08em;font-weight:700;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+    .proc-step h4{font-family:var(--font-display);font-size:1.05rem;font-weight:600;color:var(--navy);margin-bottom:6px}
+    .proc-step p{font-size:.76rem;line-height:1.5;color:var(--text-light)}
+    .proc-sep{color:var(--gold);opacity:.5;padding:0 14px}
+    .proc-sep svg{width:18px;height:18px}
+
+    /* CTA */
+    .cta{margin:20px 5% 0;background:var(--navy);border-radius:16px;padding:46px 48px;display:flex;align-items:center;justify-content:space-between;gap:30px;position:relative;overflow:hidden}
+    .cta::before{content:'';position:absolute;top:-60%;right:-3%;width:380px;height:380px;background:radial-gradient(circle,rgba(196,154,42,.16) 0%,transparent 70%);pointer-events:none}
+    .cta::after{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.015) 0 1px,transparent 1px 42px),repeating-linear-gradient(-45deg,rgba(255,255,255,.015) 0 1px,transparent 1px 42px);pointer-events:none}
+    .cta-logo{position:relative;z-index:1;flex-shrink:0}
+    .cta-logo img{height:46px;width:auto;opacity:.92}
+    .cta-mid{position:relative;z-index:1;flex:1}
+    .cta-mid h2{font-family:var(--font-display);font-size:clamp(1.5rem,2.6vw,2rem);font-weight:600;color:var(--white);margin-bottom:6px}
+    .cta-mid p{font-size:.9rem;color:rgba(255,255,255,.6);font-weight:300}
+    .cta .btn-gold{position:relative;z-index:1}
+
+    /* FOOTER */
+    footer{background:var(--navy);color:rgba(255,255,255,.7);padding:60px 5% 32px;margin-top:56px;border-top:1px solid rgba(255,255,255,.06)}
+    .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:3rem;margin-bottom:48px}
+    .foot-brand .nav-logo{margin-bottom:0}
+    .foot-brand p{font-size:.82rem;line-height:1.75;color:rgba(255,255,255,.45);margin:18px 0 22px;max-width:240px}
+    .foot-soc{display:flex;gap:12px}
+    .foot-soc a{width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);transition:all .2s;text-decoration:none}
+    .foot-soc a:hover{background:rgba(196,154,42,.2);border-color:rgba(196,154,42,.4);color:var(--gold)}
+    .foot-soc svg{width:15px;height:15px}
+    .foot-col h4{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:20px}
+    .foot-col ul{list-style:none}
+    .foot-col li{margin-bottom:10px}
+    .foot-col a{color:rgba(255,255,255,.5);text-decoration:none;font-size:.84rem;display:flex;align-items:center;justify-content:space-between;transition:color .2s}
+    .foot-col a:hover{color:var(--gold)}
+    .foot-col a span{font-size:.75rem;opacity:.5}
+    .foot-connect p{font-size:.84rem;line-height:1.6;margin-bottom:18px;color:rgba(255,255,255,.5)}
+    .foot-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:24px;display:flex;justify-content:space-between;align-items:center}
+    .foot-copy{font-size:.78rem;color:rgba(255,255,255,.35)}
+    .foot-legal{display:flex;gap:24px}
+    .foot-legal a{font-size:.78rem;color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s}
+    .foot-legal a:hover{color:rgba(255,255,255,.7)}
+
+    .js-ready .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+    .js-ready .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* Entrance animations (matched to financial-modeling / index) */
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .hero-left>*{opacity:0;animation:fadeUp .8s var(--ease) both}
+    .hero-left>*:nth-child(1){animation-delay:.15s}
+    .hero-left>*:nth-child(2){animation-delay:.28s}
+    .hero-left>*:nth-child(3){animation-delay:.4s}
+    .hero-left>*:nth-child(4){animation-delay:.52s}
+    .valcard{opacity:0;animation:fadeIn 1s var(--ease) .4s forwards}
+    .cta-logo{animation:float 4s ease-in-out infinite}
+    @media (prefers-reduced-motion:reduce){
+      .hero-left>*,.valcard{animation:none;opacity:1}
+      .cta-logo{animation:none}
+    }
+
+    @media(max-width:1024px){
+      .hero{grid-template-columns:1fr;gap:44px}
+      .feat-cards{grid-template-columns:1fr 1fr}
+      .incl-grid,.incl-rail{grid-template-columns:repeat(3,1fr);gap:28px 0}
+      .incl-rail::before{display:none}
+      .meth-cards{grid-template-columns:1fr}
+      .suited-grid{grid-template-columns:1fr}
+      .su-item{border-right:none;border-bottom:1px solid var(--border-soft);padding:20px 0}
+      .su-item:last-child{border-bottom:none}
+      .proc-wrap{grid-template-columns:1fr;gap:24px}
+      .proc-sep{display:none}
+      .foot-grid{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:1024px){
+      .incl-rail{display:none}
+    }
+    @media(max-width:768px){
+      .feat-cards{grid-template-columns:1fr}
+      .hero{padding:44px 5% 40px;gap:36px}
+      .vc-top,.vc-body{grid-template-columns:1fr;gap:24px}
+      .valcard{padding:24px 20px}
+      .vc-big{font-size:2.4rem}
+      .incl-grid{grid-template-columns:1fr 1fr;gap:24px 16px}
+      .cta{flex-direction:column;text-align:center}
+      .cta-logo{display:none}
+      .foot-grid{grid-template-columns:1fr}
+      .foot-bottom{flex-direction:column;gap:12px}
+    }
+    @media(max-width:560px){
+      .incl-grid{grid-template-columns:1fr}
+      .hero-btns .btn{width:100%;justify-content:center}
+    }
+    /* Hide custom cursor on touch devices */
+    @media (hover:none),(pointer:coarse){
+      .cur,.cur-r{display:none!important}
+    }
+  </style>
+<style id="flortran-unified">
+/* ===================== FLORTRAN UNIFIED SYSTEM ===================== */
+:root{
+  --gold:#C49A2A; --gold-light:#E8C55A; --gold-muted:#A07E22;
+  --navy:#0E1A2B; --navy-mid:#162338; --navy-light:#1E3050;
+  --cream:#FAF7F2; --white:#FFFFFF;
+  --text-dark:#0E1A2B; --text-mid:#3D4F66; --text-light:#6B7E96;
+  --font-display:'Cormorant Garamond',Georgia,serif;
+  --font-body:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono:'Space Mono','DM Sans',monospace;
+  --serif:'Cormorant Garamond',Georgia,serif;     /* legal pages */
+  --sans:'DM Sans',-apple-system,sans-serif;       /* legal pages (replaces Jost) */
+  --ease-out:cubic-bezier(0.16,1,0.3,1);
+}
+body{font-family:var(--font-body);}
+
+/* ---------- NAVBAR ---------- */
+#navbar{
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  display:flex; align-items:center; justify-content:space-between; gap:1.5rem;
+  padding:16px clamp(20px,5vw,64px);
+  background:rgba(250,247,242,0.82);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(196,154,42,0.15);
+  transition:padding .35s var(--ease-out), background .35s ease, box-shadow .35s ease;
+}
+#navbar.scrolled{ padding:10px clamp(20px,5vw,64px); background:rgba(250,247,242,0.97); box-shadow:0 6px 30px rgba(14,26,43,0.08); }
+#navbar .nav-logo{ display:inline-flex; align-items:center; gap:12px; text-decoration:none; flex-shrink:0; }
+#navbar .nav-logo .logo-icon{ height:50px; width:auto; display:block; transition:height .35s var(--ease-out); }
+#navbar.scrolled .nav-logo .logo-icon{ height:44px; }
+.nav-logo .logo-text{ display:flex; flex-direction:column; line-height:1; }
+.nav-logo .logo-name{ font-family:var(--font-display); font-size:1.45rem; font-weight:600; letter-spacing:.14em; color:var(--navy); }
+.nav-logo .logo-tagline{ font-family:var(--font-body); font-size:.58rem; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--gold-muted); margin-top:4px; }
+.nav-drawer{ display:contents; }
+.nav-links{ display:flex; align-items:center; gap:2.1rem; list-style:none; margin:0 auto; padding:0; }
+.nav-links li{ margin:0; }
+.nav-links a{ font-family:var(--font-body); font-size:.9rem; font-weight:500; color:var(--text-mid); text-decoration:none; position:relative; padding:4px 0; transition:color .25s; white-space:nowrap; }
+.nav-links a::after{ content:""; position:absolute; left:0; bottom:-3px; height:1.5px; width:0; background:var(--gold); transition:width .3s var(--ease-out); }
+.nav-links a:hover, .nav-links a.active{ color:var(--navy); }
+.nav-links a:hover::after, .nav-links a.active::after{ width:100%; }
+.nav-cta{ flex-shrink:0; }
+
+/* ---------- HAMBURGER ---------- */
+.hamburger{ display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:6px; z-index:1002; }
+.hamburger span{ display:block; width:24px; height:2px; background:var(--navy); border-radius:2px; transition:transform .35s var(--ease-out), opacity .25s ease; }
+#navbar.menu-open .hamburger span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+#navbar.menu-open .hamburger span:nth-child(2){ opacity:0; }
+#navbar.menu-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+/* ---------- UNIFIED BUTTONS ---------- */
+.btn-cta,.btn-gold,.btn.btn-gold,.cta-btn,.btn-navy,.btn-download,
+.btn-outline,.btn.btn-outline,.btn-ghost,.btn-ghost-d,.btn-linkedin{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  font-family:var(--font-body); font-size:.875rem; font-weight:600; letter-spacing:.02em;
+  line-height:1; padding:12px 26px; border-radius:4px; border:1.5px solid transparent;
+  text-decoration:none; cursor:pointer; white-space:nowrap;
+  transition:background .3s ease, color .3s ease, border-color .3s ease, transform .3s var(--ease-out), box-shadow .3s ease;
+}
+/* primary (gold fill, white text) */
+.btn-cta,.btn-gold,.btn.btn-gold,.cta-btn,.btn-download{ background:var(--gold); color:var(--white)!important; border-color:var(--gold); }
+.btn-cta:hover,.btn-gold:hover,.btn.btn-gold:hover,.cta-btn:hover,.btn-download:hover{ background:var(--gold-muted); border-color:var(--gold-muted); color:var(--white)!important; transform:translateY(-2px); box-shadow:0 10px 30px rgba(196,154,42,.28); }
+/* secondary (navy fill, white text) */
+.btn-navy{ background:var(--navy); color:var(--white)!important; border-color:var(--navy); }
+.btn-navy:hover{ background:var(--navy-light); border-color:var(--navy-light); color:var(--white)!important; transform:translateY(-2px); box-shadow:0 10px 30px rgba(14,26,43,.22); }
+/* outline on light backgrounds */
+.btn-outline,.btn.btn-outline,.btn-ghost,.btn-linkedin{ background:transparent; color:var(--navy)!important; border-color:rgba(14,26,43,.24); }
+.btn-outline:hover,.btn.btn-outline:hover,.btn-ghost:hover,.btn-linkedin:hover{ border-color:var(--gold); color:var(--gold)!important; transform:translateY(-2px); }
+/* outline on dark backgrounds */
+.btn-ghost-d{ background:transparent; color:var(--white)!important; border-color:rgba(255,255,255,.32); }
+.btn-ghost-d:hover{ border-color:var(--gold-light); color:var(--gold-light)!important; transform:translateY(-2px); }
+/* large modifier */
+.btn-lg,.btn.btn-lg{ padding:15px 34px!important; font-size:.95rem!important; }
+.btn-download{ width:100%; }
+
+/* social / icon buttons */
+.footer-socials{ display:flex; gap:12px; }
+.social-btn{ width:40px; height:40px; padding:0; border-radius:8px; display:inline-flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:rgba(255,255,255,.8);
+  transition:background .25s, border-color .25s, color .25s, transform .25s; }
+.social-btn svg{ width:18px; height:18px; }
+.social-btn:hover{ background:var(--gold); border-color:var(--gold); color:var(--white); transform:translateY(-2px); }
+
+/* ---------- UNIFIED FOOTER ---------- */
+footer{ background:var(--navy); color:rgba(255,255,255,.72); padding:72px clamp(20px,5vw,64px) 32px; font-family:var(--font-body); }
+.footer-grid{ display:grid; grid-template-columns:1.6fr 1fr 1fr 1.2fr; gap:3rem; max-width:1240px; margin:0 auto; }
+.footer-brand .footer-logo{ display:inline-flex; align-items:center; }
+.footer-brand .footer-logo .logo-icon{ height:50px; width:auto; display:block; }
+.footer-brand .footer-logo .logo-name{ color:#fff!important; }
+.footer-brand .footer-logo .logo-tagline{ color:var(--gold-light); }
+.footer-brand>p{ margin:18px 0 22px; font-size:.92rem; line-height:1.7; max-width:34ch; color:rgba(255,255,255,.6); }
+.footer-col h4{ font-family:var(--font-body); font-size:.78rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-light); margin:0 0 18px; }
+.footer-col ul{ list-style:none; margin:0; padding:0; }
+.footer-col li{ margin-bottom:12px; }
+.footer-col a{ color:rgba(255,255,255,.68); text-decoration:none; font-size:.92rem; display:inline-flex; align-items:center; gap:6px; transition:color .25s, gap .25s; }
+.footer-col a:hover{ color:var(--gold-light); gap:10px; }
+.footer-col a .lk-arrow{ width:11px; height:11px; opacity:.6; }
+.footer-connect p{ font-size:.9rem; line-height:1.6; margin:0 0 18px; color:rgba(255,255,255,.6); }
+.footer-bottom{ display:flex; align-items:center; justify-content:space-between; gap:14px; max-width:1240px; margin:48px auto 0; padding-top:24px; border-top:1px solid rgba(255,255,255,.1); font-size:.84rem; color:rgba(255,255,255,.5); }
+.footer-bottom-links{ display:flex; gap:24px; }
+.footer-bottom-links a{ color:rgba(255,255,255,.6); text-decoration:none; transition:color .25s; }
+.footer-bottom-links a:hover{ color:var(--gold-light); }
+
+/* ---------- MOBILE ---------- */
+@media (max-width:980px){
+  .hamburger{ display:flex; }
+  .nav-drawer{
+    display:flex; flex-direction:column; align-items:flex-start; gap:0;
+    position:fixed; top:0; right:0; height:100vh; width:min(82vw,360px);
+    padding:104px 34px 40px; margin:0;
+    background:var(--navy); box-shadow:-24px 0 70px rgba(0,0,0,.35);
+    transform:translateX(105%); transition:transform .42s var(--ease-out); z-index:1001; overflow-y:auto;
+  }
+  #navbar.menu-open .nav-drawer{ transform:translateX(0); }
+  .nav-links{ flex-direction:column; align-items:stretch; gap:0; margin:0; width:100%; }
+  .nav-links li{ width:100%; border-bottom:1px solid rgba(255,255,255,.09); }
+  .nav-links a{ display:block; width:100%; padding:17px 2px; font-size:1.05rem; color:rgba(255,255,255,.85); }
+  .nav-links a::after{ display:none; }
+  .nav-links a:hover, .nav-links a.active{ color:var(--gold-light); }
+  .nav-cta{ margin-top:26px; width:100%; }
+  body.nav-locked{ overflow:hidden; }
+  #navbar.menu-open::before{ content:""; position:fixed; inset:0; background:rgba(14,26,43,.55); z-index:1000; -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px); }
+  .footer-grid{ grid-template-columns:1fr 1fr; gap:2.2rem; }
+  .footer-bottom{ flex-direction:column; gap:12px; text-align:center; }
+}
+@media (max-width:560px){
+  .footer-grid{ grid-template-columns:1fr; gap:2rem; }
+  #navbar .nav-logo .logo-icon{ height:44px; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+<div class="cur" id="cur"></div>
+<div class="cur-r" id="curR"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a class="nav-logo" href="index.html" aria-label="Flortran home">
+    <img class="logo-icon" src="flortran-logo-header.png" alt="Flortran — Finance. Advice. Transcend." />
+    
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-drawer" id="nav-drawer">
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html" class="active">Services</a></li>
+        <li><a href="case-study.html">Case Studies</a></li>
+        <li><a href="credentials.html">Credentials</a></li>
+        <li><a href="free-resource.html">Free Resource</a></li>
+    </ul>
+    <a class="btn-cta nav-cta" href="book-consultation.html#book">Book Consultation</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="eyebrow">Business Valuation</div>
+    <h1 class="hero-h1">Independent valuations built for capital, strategy, and confidence.</h1>
+    <p class="hero-sub">Flortran helps founders and businesses determine what their company is worth using rigorous methodologies, market insights, and clear narratives you can stand behind.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn btn-gold btn-lg">Book a Consultation <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="#contact" class="btn btn-outline btn-lg">Request a Valuation Review <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6"/></svg></a>
+    </div>
+  </div>
+
+  <!-- VALUATION CARD -->
+  <div class="valcard">
+    <div class="vc-top">
+      <div>
+        <div class="vc-label">Indicative Value Range</div>
+        <div class="vc-big">$128.7M</div>
+        <div class="vc-delta"><strong>+18.6%</strong> vs. Base Case</div>
+      </div>
+      <div>
+        <div class="vc-range-label">Valuation Range (USD)</div>
+        <div class="vc-slider"><span class="vc-knob"></span></div>
+        <div class="vc-range-vals">
+          <div class="col"><div class="vc-rv-lab">Low Case</div><div class="vc-rv-val">$102.4M</div></div>
+          <div class="col"><div class="vc-rv-lab">Base Case</div><div class="vc-rv-val">$128.7M</div></div>
+          <div class="col"><div class="vc-rv-lab">High Case</div><div class="vc-rv-val">$158.9M</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="vc-body">
+      <div>
+        <div class="vc-sec-label">Key Drivers</div>
+        <div class="driver"><span class="dn">Revenue Growth</span><span class="db"><span class="df" style="width:78%"></span></span><span class="dp">42%</span></div>
+        <div class="driver"><span class="dn">EBITDA Margin</span><span class="db"><span class="df" style="width:62%"></span></span><span class="dp">28%</span></div>
+        <div class="driver"><span class="dn">WACC</span><span class="db"><span class="df" style="width:40%"></span></span><span class="dp">17%</span></div>
+        <div class="driver"><span class="dn">Terminal Multiple</span><span class="db"><span class="df" style="width:30%"></span></span><span class="dp">13%</span></div>
+      </div>
+      <div>
+        <div class="vc-sec-label">Methodologies Used</div>
+        <div class="meth-grid">
+          <div class="meth"><span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 17l5-5 4 3 7-8"/></svg></span>DCF Analysis</div>
+          <div class="meth"><span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Comparable Companies</div>
+          <div class="meth"><span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 16V8l-9-5-9 5v8l9 5z"/></svg></span>Precedent Transactions</div>
+          <div class="meth"><span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></span>Sensitivity Analysis</div>
+        </div>
+      </div>
+    </div>
+    <div class="vc-foot">Valuation date: May 10, 2024&nbsp;&nbsp;|&nbsp;&nbsp;Currency: USD</div>
+  </div>
+</section>
+
+<!-- FEATURE CARDS -->
+<div class="feat-cards">
+  <div class="fc reveal">
+    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/><path d="M9 12l2 2 4-4"/></svg></div>
+    <div><h3>Defensible Methods</h3><p>Rigorously tested approaches and cross-checks that stand up to investor scrutiny.</p></div>
+  </div>
+  <div class="fc reveal">
+    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></div>
+    <div><h3>Investor-Ready Narrative</h3><p>Clear, concise valuation stories that communicate your business value with confidence.</p></div>
+  </div>
+  <div class="fc reveal">
+    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 3 7-8"/><path d="M21 7v4h-4"/></svg></div>
+    <div><h3>Scenario Analysis</h3><p>Bull, base, and bear cases to understand value drivers and key sensitivities.</p></div>
+  </div>
+  <div class="fc reveal">
+    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l4-2v15M13 21V4l6 2v15"/><path d="M8 11h.01M8 15h.01M16 11h.01M16 15h.01"/></svg></div>
+    <div><h3>Industry Context</h3><p>Deep market insights and benchmarks tailored to your industry and stage.</p></div>
+  </div>
+</div>
+
+<!-- WHAT'S INCLUDED -->
+<section class="section">
+  <div class="sec-head"><span class="bar"></span><h2>What's included</h2></div>
+  <div class="incl-wrap reveal">
+    <div class="incl-grid">
+      <div class="incl-step"><div class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><h4>Discovery &amp; Data Intake</h4><p>Understand your business, goals, and data needs.</p></div>
+      <div class="incl-step"><div class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 21V8M9 21V3M15 21v-9M21 21v-5"/></svg></div><h4>Financial Analysis</h4><p>Normalize financials and assess historical performance.</p></div>
+      <div class="incl-step"><div class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><h4>Valuation Approach Selection</h4><p>Determine the best-fit methods for your business.</p></div>
+      <div class="incl-step"><div class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><h4>DCF Model Build</h4><p>Build a robust DCF with clear assumptions.</p></div>
+      <div class="incl-step"><div class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div><h4>Market Comparables</h4><p>Analyze comparable public companies.</p></div>
+      <div class="incl-step"><div class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8l-9-5-9 5v8l9 5z"/><path d="M3.3 7L12 12l8.7-5M12 12v10"/></svg></div><h4>Precedent Transactions</h4><p>Review relevant M&amp;A and financing deals.</p></div>
+      <div class="incl-step"><div class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l5 2-2 5M20 20l-5-2 2-5"/><path d="M9 6a9 9 0 016 12"/></svg></div><h4>Cross-Checks &amp; Reconciliation</h4><p>Triangulate results and validate outputs.</p></div>
+      <div class="incl-step"><div class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><h4>Valuation Memo &amp; Key Takeaways</h4><p>Document findings, range, and key drivers.</p></div>
+      <div class="incl-step"><div class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M7 9l3 3 4-5"/></svg></div><h4>Presentation-Ready Summary</h4><p>Deliver a polished deck for stakeholders.</p></div>
+    </div>
+    <div class="incl-rail">
+      <div class="incl-num">1</div><div class="incl-num">2</div><div class="incl-num">3</div><div class="incl-num">4</div><div class="incl-num">5</div><div class="incl-num">6</div><div class="incl-num">7</div><div class="incl-num">8</div><div class="incl-num">9</div>
+    </div>
+    <div class="incl-timeline">Typical timeline: 2–3 weeks</div>
+  </div>
+</section>
+
+<!-- METHODOLOGIES -->
+<section class="section" style="padding-top:0">
+  <div class="sec-head"><span class="bar"></span><h2>Valuation methodologies</h2></div>
+  <div class="meth-cards">
+    <div class="mc reveal">
+      <div class="mc-head">
+        <div class="mc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 21h18M6 21V11M11 21V7M16 21v-6M21 21V4"/></svg></div>
+        <div><h3>DCF Analysis</h3></div>
+      </div>
+      <p>Discount future cash flows to present value based on a supportable WACC and long-term assumptions.</p>
+      <a href="#contact" class="mc-link">Learn more →</a>
+    </div>
+    <div class="mc reveal">
+      <div class="mc-head">
+        <div class="mc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+        <div><h3>Comparable Company Analysis</h3></div>
+      </div>
+      <p>Benchmark your business against similar public companies using relevant valuation multiples.</p>
+      <a href="#contact" class="mc-link">Learn more →</a>
+    </div>
+    <div class="mc reveal">
+      <div class="mc-head">
+        <div class="mc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11l-4 2 4 2M16 11l4 2-4 2"/><path d="M4 13h6a4 4 0 004-4M20 13h-2"/></svg></div>
+        <div><h3>Precedent Transactions</h3></div>
+      </div>
+      <p>Analyze recent M&amp;A and financing transactions to derive implied enterprise values.</p>
+      <a href="#contact" class="mc-link">Learn more →</a>
+    </div>
+  </div>
+</section>
+
+<!-- BEST SUITED -->
+<section class="section" style="padding-top:0">
+  <div class="sec-head"><span class="bar"></span><h2>Best suited for</h2></div>
+  <div class="suited-grid reveal">
+    <div class="su-item">
+      <div class="su-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+      <div><h3>Founders raising capital</h3><p>Build investor confidence with an independent valuation that validates your story and terms.</p></div>
+    </div>
+    <div class="su-item">
+      <div class="su-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l4-2v15M13 21V4l6 2v15"/><path d="M8 11h.01M8 15h.01M16 11h.01M16 15h.01"/></svg></div>
+      <div><h3>Businesses exploring sale or acquisition</h3><p>Understand your value, negotiate with clarity, and maximize strategic outcomes.</p></div>
+    </div>
+    <div class="su-item">
+      <div class="su-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></div>
+      <div><h3>Operators making strategic decisions</h3><p>Use valuation insights to guide planning, prioritization, and capital allocation.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section" style="padding-top:0">
+  <div class="sec-head"><span class="bar"></span><h2>Our process</h2></div>
+  <div class="proc-wrap reveal">
+    <div class="proc-step">
+      <div class="proc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+      <div><div class="pt">1 Understand the business</div><p>We learn your model, market, and strategic goals.</p></div>
+    </div>
+    <span class="proc-sep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    <div class="proc-step">
+      <div class="proc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 21V8M9 21V3M15 21v-9M21 21v-5"/></svg></div>
+      <div><div class="pt">2 Analyze the numbers</div><p>We assess financials, drivers, and market dynamics.</p></div>
+    </div>
+    <span class="proc-sep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    <div class="proc-step">
+      <div class="proc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div><div class="pt">3 Triangulate value</div><p>We apply multiple methods and reconcile the range.</p></div>
+    </div>
+    <span class="proc-sep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    <div class="proc-step">
+      <div class="proc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6"/></svg></div>
+      <div><div class="pt">4 Deliver the story</div><p>We deliver a clear, compelling narrative you can defend.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div class="cta-logo"><img src="data:image/png;base64,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" alt="Flortran"/></div>
+  <div class="cta-mid">
+    <h2>Need a valuation you can defend?</h2>
+    <p>Let's discuss your goals and how we can help you move forward with clarity.</p>
+  </div>
+  <a href="mailto:hello@flortran.com" class="btn btn-gold btn-lg">Book a Consultation <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo footer-logo" href="index.html" aria-label="Flortran home">
+        <img class="logo-icon" src="flortran-logo-footer.png" alt="Flortran" />
+        
+      </a>
+      <p>We partner with founders and businesses to create clarity, build investor confidence, and transcend limitations—through numbers that tell a compelling story.</p>
+      <div class="footer-socials">
+        <a class="social-btn" aria-label="LinkedIn" href="https://www.linkedin.com" rel="noopener" target="_blank"><svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0zM.5 8h4V24h-4V8zM8 8h3.8v2.2h.05c.53-1 1.83-2.2 3.77-2.2 4.03 0 4.78 2.65 4.78 6.1V24h-4v-7c0-1.67-.03-3.8-2.32-3.8-2.32 0-2.68 1.8-2.68 3.68V24H8V8z"></path></svg></a>
+        <a class="social-btn" aria-label="Email" href="mailto:hello@flortran.com"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><path d="M22 6l-10 7L2 6"></path></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="services.html#business-valuation">Business Valuation <svg class="lk-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4"></path></svg></a></li>
+        <li><a href="services.html#financial-modeling">Financial Modeling <svg class="lk-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4"></path></svg></a></li>
+        <li><a href="services.html#investment-readiness-review">Investment Readiness Review <svg class="lk-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4"></path></svg></a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="case-study.html">Case Studies</a></li>
+        <li><a href="credentials.html">Credentials</a></li>
+        <li><a href="free-resource.html">Free Resource</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-connect">
+      <h4>Let's Connect</h4>
+      <p>Have a project in mind? Let's build your investment story.</p>
+      <a class="btn-cta" href="book-consultation.html#book">Book a Consultation <svg class="lk-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4"></path></svg></a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Flortran Advisory &amp; Consulting. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-of-use.html">Terms of Use</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add('js-ready');
+
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+if(cur&&curR){
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function anim(){
+    cur.style.left=mx+'px';cur.style.top=my+'px';
+    rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+    curR.style.left=rx+'px';curR.style.top=ry+'px';
+    requestAnimationFrame(anim);
+  })();
+}
+
+window.addEventListener('scroll',()=>{
+  const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  const pb=document.getElementById('prog'); if(pb) pb.style.width=pct+'%';
+  const nv=document.getElementById('nav'); if(nv) nv.classList.toggle('scrolled',window.scrollY>30);
+});
+
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+<script id="flortran-nav-js">
+(function(){
+  var nav=document.getElementById('navbar');
+  var burger=document.getElementById('hamburger');
+  var drawer=document.getElementById('nav-drawer');
+  if(burger&&nav){
+    burger.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=nav.classList.toggle('menu-open');
+      document.body.classList.toggle('nav-locked',open);
+      burger.setAttribute('aria-expanded',open?'true':'false');
+      burger.setAttribute('aria-label',open?'Close menu':'Open menu');
+    });
+    if(drawer){
+      drawer.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click',function(){
+          nav.classList.remove('menu-open');
+          document.body.classList.remove('nav-locked');
+          burger.setAttribute('aria-expanded','false');
+          burger.setAttribute('aria-label','Open menu');
+        });
+      });
+    }
+    document.addEventListener('keydown',function(ev){
+      if(ev.key==='Escape'&&nav.classList.contains('menu-open')){
+        nav.classList.remove('menu-open'); document.body.classList.remove('nav-locked');
+        burger.setAttribute('aria-expanded','false'); burger.setAttribute('aria-label','Open menu');
+      }
+    });
+  }
+  function onScroll(){ if(nav) nav.classList.toggle('scrolled', window.scrollY>30); }
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+})();
+</script>
+</body>
+</html>

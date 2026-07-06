@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Methodology 2 — Flortran Advisory & Consulting</title>
+  <meta name="description" content="Flortran methodology page for a QSR market-entry financial model and scenario-driven feasibility assessment." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #061f4f;
+      --navy-2: #092a67;
+      --navy-3: #0f397c;
+      --gold: #d99a1c;
+      --gold-2: #efb13c;
+      --cream: #fbfaf7;
+      --white: #ffffff;
+      --line: rgba(6, 31, 79, 0.10);
+      --text: #071f4d;
+      --muted: #4c5f83;
+      --soft: #f7f9fc;
+      --shadow: 0 24px 70px rgba(6, 31, 79, 0.12);
+      --shadow-soft: 0 14px 44px rgba(6, 31, 79, 0.08);
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+      --max: 1160px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      min-height: 100vh;
+      font-family: var(--font-body);
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10000;
+      opacity: .32;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+    }
+
+    a { color: inherit; }
+    img, svg { display: block; max-width: 100%; }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      z-index: 9999;
+      background: linear-gradient(90deg, var(--gold), var(--gold-2));
+      box-shadow: 0 4px 18px rgba(217, 154, 28, .45);
+    }
+
+    .page-shell { position: relative; isolation: isolate; }
+
+    .ambient {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .ambient span {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(4px);
+      opacity: .45;
+      animation: floatDrift 9s var(--ease) infinite alternate;
+    }
+
+    .ambient span:nth-child(1) { width: 18rem; height: 18rem; top: 8%; right: -5rem; background: rgba(217,154,28,.10); }
+    .ambient span:nth-child(2) { width: 22rem; height: 22rem; bottom: 18%; left: -9rem; background: rgba(6,31,79,.08); animation-delay: -3s; }
+    .ambient span:nth-child(3) { width: 10rem; height: 10rem; top: 48%; right: 8%; background: rgba(217,154,28,.08); animation-delay: -5s; }
+
+    @keyframes floatDrift {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(22px, -28px, 0) scale(1.08); }
+    }
+
+    .container {
+      width: min(calc(100% - 40px), var(--max));
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, .86);
+      backdrop-filter: blur(18px) saturate(1.25);
+      border-bottom: 1px solid rgba(6, 31, 79, .08);
+      transition: box-shadow .3s ease, background .3s ease;
+    }
+
+    .site-header.is-scrolled {
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 10px 34px rgba(6, 31, 79, .08);
+    }
+
+    .nav {
+      width: min(calc(100% - 40px), 1200px);
+      height: 78px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      width: 43px;
+      height: 43px;
+      display: grid;
+      place-items: center;
+    }
+
+    .brand-word {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+
+    .brand-word strong {
+      font-size: 1.42rem;
+      letter-spacing: .27em;
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    .brand-word small {
+      margin-top: 6px;
+      font-size: .56rem;
+      letter-spacing: .22em;
+      color: var(--gold);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(22px, 3vw, 38px);
+      margin-left: auto;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: .91rem;
+      font-weight: 600;
+      color: var(--navy);
+      position: relative;
+      padding: 7px 0;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      height: 2px;
+      width: 0;
+      background: var(--gold);
+      transition: width .3s var(--ease);
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after { width: 100%; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 0 24px;
+      border-radius: 5px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: .92rem;
+      cursor: pointer;
+      transition: transform .25s var(--ease), box-shadow .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
+    }
+
+    .btn-gold {
+      color: #fff;
+      background: linear-gradient(135deg, var(--gold), var(--gold-2));
+      box-shadow: 0 12px 28px rgba(217,154,28,.22);
+    }
+
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(217,154,28,.32); }
+
+    .btn-dark {
+      color: #fff;
+      background: var(--navy);
+      border-color: rgba(255,255,255,.14);
+    }
+
+    .btn-dark:hover { transform: translateY(-2px); background: var(--navy-2); }
+
+    .hamburger {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(6,31,79,.12);
+      border-radius: 10px;
+      background: #fff;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      width: 20px;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--navy);
+      transition: transform .3s var(--ease), opacity .2s ease;
+    }
+
+    .menu-open .hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .menu-open .hamburger span:nth-child(2) { opacity: 0; }
+    .menu-open .hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      padding: 64px 0 84px;
+      background:
+        radial-gradient(circle at 78% 36%, rgba(217,154,28,.10), transparent 24rem),
+        linear-gradient(180deg, #fff 0%, #fbfaf7 100%);
+      border-bottom: 1px solid rgba(6,31,79,.08);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='900' height='500' viewBox='0 0 900 500' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23061f4f' stroke-opacity='.065'%3E%3Cpath d='M-22 382C155 214 323 193 500 317s314 123 430-18'/%3E%3Cpath d='M-24 346C157 185 324 166 503 292s318 124 431-19'/%3E%3Cpath d='M-23 310C159 155 329 139 505 267s324 126 435-19'/%3E%3Cpath d='M-21 274C162 125 330 110 507 241s329 130 438-20'/%3E%3Cpath d='M-22 237C162 94 332 82 510 216s334 132 443-21'/%3E%3Cpath d='M-20 201C164 65 336 55 514 191s339 135 445-21'/%3E%3C/g%3E%3C/svg%3E");
+      background-position: right -80px top 20px;
+      background-repeat: no-repeat;
+      background-size: min(870px, 80vw) auto;
+      opacity: .75;
+      pointer-events: none;
+    }
+
+    .breadcrumb {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: .84rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+    }
+
+    .breadcrumb a { text-decoration: none; color: var(--gold); }
+    .breadcrumb svg { width: 15px; color: var(--muted); opacity: .75; }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+      align-items: center;
+      gap: clamp(38px, 6vw, 92px);
+    }
+
+    .case-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 22px;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: .84rem;
+      font-weight: 800;
+    }
+
+    .case-kicker span {
+      display: inline-grid;
+      place-items: center;
+      width: 31px;
+      height: 27px;
+      border-radius: 4px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--gold), var(--gold-2));
+      letter-spacing: 0;
+      font-size: .79rem;
+      box-shadow: 0 10px 24px rgba(217,154,28,.22);
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--navy);
+      font-size: clamp(3.2rem, 6vw, 5.15rem);
+      line-height: .95;
+      letter-spacing: -.045em;
+      margin-bottom: 24px;
+    }
+
+    .hero-copy {
+      max-width: 590px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.85;
+      font-weight: 500;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 42px;
+      text-decoration: none;
+      color: var(--gold);
+      font-weight: 800;
+      font-size: .95rem;
+      transition: gap .25s var(--ease), color .25s ease;
+    }
+
+    .back-link:hover { gap: 15px; color: var(--navy); }
+    .back-link svg { width: 18px; }
+
+    .industry-card {
+      position: relative;
+      min-height: 256px;
+      padding: clamp(28px, 4vw, 48px);
+      color: #fff;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(255,255,255,.17), transparent 15rem),
+        linear-gradient(145deg, #071d4d, #06245c 62%, #071a45);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 9px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    .industry-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      background-image: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.13), transparent 70%);
+      transform: translateX(-120%);
+      animation: shimmer 5s ease-in-out infinite;
+    }
+
+    .industry-card::after {
+      content: '';
+      position: absolute;
+      right: -70px;
+      bottom: -80px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 1px solid rgba(217,154,28,.18);
+    }
+
+    @keyframes shimmer {
+      0%, 35% { transform: translateX(-120%); }
+      55%, 100% { transform: translateX(120%); }
+    }
+
+    .industry-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      align-items: center;
+      gap: 28px;
+      min-height: 170px;
+    }
+
+    .industry-icon {
+      width: 86px;
+      height: 86px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      transform: translateZ(26px);
+    }
+
+    .industry-facts {
+      display: grid;
+      gap: 32px;
+      transform: translateZ(18px);
+    }
+
+    .fact-label {
+      color: rgba(255,255,255,.82);
+      font-size: .8rem;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .fact-value {
+      color: rgba(255,255,255,.92);
+      font-size: .98rem;
+      line-height: 1.6;
+    }
+
+    /* Sections */
+    .section {
+      padding: 76px 0;
+      background: rgba(255,255,255,.70);
+      border-bottom: 1px solid rgba(6,31,79,.08);
+    }
+
+    .section.alt { background: rgba(250, 250, 247, .88); }
+
+    .section-head {
+      max-width: 660px;
+      margin-bottom: 42px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.15rem, 3vw, 3rem);
+      line-height: 1;
+      color: var(--navy);
+      letter-spacing: -.035em;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .section-lead {
+      color: var(--muted);
+      line-height: 1.85;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    /* Approach timeline */
+    .approach-track {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0;
+      position: relative;
+      padding-top: 20px;
+    }
+
+    .method-step {
+      position: relative;
+      padding: 0 24px 0 0;
+      min-height: 252px;
+    }
+
+    .method-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 53px;
+      left: 118px;
+      width: calc(100% - 126px);
+      height: 2px;
+      background-image: linear-gradient(90deg, var(--navy) 45%, transparent 45%);
+      background-size: 8px 2px;
+      opacity: .65;
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform .8s var(--ease);
+      transition-delay: calc(var(--i) * .16s + .35s);
+    }
+
+    .visible .method-step::after { transform: scaleX(1); }
+
+    .step-icon {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--navy);
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(6,31,79,.12);
+      box-shadow: 0 18px 46px rgba(6,31,79,.07);
+      margin: 0 auto 28px 0;
+      transform: scale(.82);
+      opacity: 0;
+      transition: transform .65s var(--ease), opacity .65s var(--ease), border-color .25s ease, color .25s ease;
+      transition-delay: calc(var(--i) * .14s);
+    }
+
+    .step-icon svg { width: 39px; height: 39px; }
+    .method-step:hover .step-icon { color: var(--gold); border-color: rgba(217,154,28,.45); }
+    .visible .step-icon { opacity: 1; transform: scale(1); }
+
+    .step-body {
+      position: relative;
+      padding-left: 0;
+      padding-right: 16px;
+      transform: translateY(18px);
+      opacity: 0;
+      transition: transform .65s var(--ease), opacity .65s var(--ease);
+      transition-delay: calc(var(--i) * .14s + .1s);
+    }
+
+    .visible .step-body { opacity: 1; transform: translateY(0); }
+
+    .step-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.13rem;
+      color: var(--navy);
+    }
+
+    .step-num {
+      display: inline-grid;
+      place-items: center;
+      min-width: 29px;
+      height: 27px;
+      border-radius: 4px;
+      background: var(--gold);
+      color: #fff;
+      font-family: var(--font-body);
+      font-size: .74rem;
+      font-weight: 800;
+    }
+
+    .step-copy {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: .91rem;
+      font-weight: 500;
+    }
+
+    .method-step:not(:last-child) .step-body::after {
+      content: '';
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      height: 124px;
+      width: 1px;
+      background: rgba(6,31,79,.10);
+    }
+
+    /* Framework cards */
+    .framework-layout {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      gap: 34px;
+      align-items: start;
+    }
+
+    .framework-intro {
+      position: sticky;
+      top: 104px;
+    }
+
+    .framework-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+
+    .framework-grid.qsr-framework-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .framework-card {
+      position: relative;
+      min-height: 238px;
+      padding: 28px 23px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(6,31,79,.10);
+      border-radius: 8px;
+      box-shadow: 0 12px 34px rgba(6,31,79,.045);
+      overflow: hidden;
+      transition: transform .35s var(--ease), box-shadow .35s ease, border-color .35s ease;
+    }
+
+    .framework-card::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .35s var(--ease);
+    }
+
+    .framework-card:hover {
+      transform: translateY(-7px);
+      box-shadow: var(--shadow-soft);
+      border-color: rgba(217,154,28,.25);
+    }
+
+    .framework-card:hover::before { transform: scaleX(1); }
+
+    .framework-icon {
+      width: 43px;
+      height: 43px;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+
+    .framework-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.16rem;
+      line-height: 1.18;
+      color: var(--navy);
+      margin-bottom: 14px;
+    }
+
+    .framework-card p {
+      color: var(--muted);
+      font-size: .86rem;
+      line-height: 1.72;
+      font-weight: 500;
+    }
+
+    /* Metrics */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1.15fr 1.1fr;
+      gap: 0;
+      margin-top: 18px;
+      border-top: 1px solid rgba(6,31,79,.06);
+      border-bottom: 1px solid rgba(6,31,79,.06);
+      background: rgba(255,255,255,.58);
+    }
+
+    .metric {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 16px;
+      align-items: center;
+      padding: 26px 22px;
+      border-right: 1px solid rgba(6,31,79,.10);
+    }
+
+    .metric:last-child { border-right: 0; }
+
+    .metric-badge {
+      width: 52px;
+      height: 52px;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      color: var(--gold);
+      display: grid;
+      place-items: center;
+      transform: rotate(-8deg) scale(.95);
+      transition: transform .35s var(--ease), background .35s ease, color .35s ease;
+    }
+
+    .metric:hover .metric-badge {
+      background: var(--gold);
+      color: #fff;
+      transform: rotate(0deg) scale(1.04);
+    }
+
+    .metric-badge svg { width: 27px; }
+
+    .metric-value {
+      font-family: var(--font-display);
+      color: var(--navy);
+      font-size: 1.65rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric-title {
+      color: var(--navy);
+      font-size: .91rem;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 5px;
+    }
+
+    .metric-copy {
+      color: var(--muted);
+      font-size: .78rem;
+      line-height: 1.56;
+      font-weight: 500;
+    }
+
+    .cta-panel {
+      margin-top: 42px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 7px;
+      background:
+        radial-gradient(circle at 14% 50%, rgba(217,154,28,.22), transparent 13rem),
+        linear-gradient(135deg, var(--navy), #042763 60%, #061a46);
+      padding: 30px 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      color: #fff;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .cta-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(120deg, transparent 35%, rgba(255,255,255,.08), transparent 65%);
+      transform: translateX(-100%);
+      animation: panelLight 6s ease-in-out infinite;
+    }
+
+    @keyframes panelLight {
+      0%, 45% { transform: translateX(-100%); }
+      70%, 100% { transform: translateX(100%); }
+    }
+
+    .cta-left {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .cta-icon {
+      width: 62px;
+      height: 62px;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+
+    .cta-icon svg { width: 30px; color: #fff; }
+
+    .cta-panel h3 {
+      font-family: var(--font-display);
+      font-size: clamp(1.55rem, 2.4vw, 2.1rem);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .cta-panel p { color: rgba(255,255,255,.82); font-weight: 500; }
+    .cta-panel .btn { position: relative; z-index: 1; min-width: 240px; }
+
+    /* Footer */
+    .footer {
+      background: linear-gradient(180deg, var(--navy) 0%, #04173e 100%);
+      color: rgba(255,255,255,.78);
+      padding: 46px 0 20px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr 1fr 1.2fr;
+      gap: clamp(28px, 5vw, 64px);
+      align-items: start;
+    }
+
+    .footer .brand-word strong { color: #fff; }
+    .footer .brand-word small { color: var(--gold-2); }
+    .footer-copy { max-width: 310px; margin-top: 18px; color: rgba(255,255,255,.70); line-height: 1.76; font-size: .92rem; }
+
+    .socials { display: flex; gap: 11px; margin-top: 18px; }
+    .socials a {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 7px;
+      transition: transform .25s var(--ease), background .25s ease, border-color .25s ease;
+    }
+    .socials a:hover { transform: translateY(-3px); background: var(--gold); border-color: var(--gold); }
+
+    .footer h4 {
+      color: var(--gold-2);
+      text-transform: uppercase;
+      letter-spacing: .13em;
+      font-size: .82rem;
+      margin-bottom: 18px;
+    }
+
+    .footer ul { list-style: none; display: grid; gap: 13px; }
+    .footer a { text-decoration: none; }
+    .footer li a {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,.73);
+      font-size: .92rem;
+      transition: color .25s ease, gap .25s var(--ease);
+    }
+    .footer li a:hover { color: var(--gold-2); gap: 14px; }
+    .footer-connect p { line-height: 1.65; color: rgba(255,255,255,.76); margin-bottom: 18px; font-size: .92rem; }
+    .footer-connect .btn { min-height: 42px; }
+
+    .footer-bottom {
+      margin-top: 34px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+      color: rgba(255,255,255,.58);
+      font-size: .82rem;
+    }
+
+    .footer-bottom-links { display: flex; gap: 22px; }
+    .footer-bottom-links a:hover { color: var(--gold-2); }
+
+    /* Animation utilities */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .75s var(--ease), transform .75s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: .1s; }
+    .delay-2 { transition-delay: .2s; }
+    .delay-3 { transition-delay: .3s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      .reveal, .step-icon, .step-body { opacity: 1 !important; transform: none !important; }
+      .method-step::after { transform: scaleX(1) !important; }
+    }
+
+    @media (max-width: 1050px) {
+      .nav-links { gap: 20px; }
+      .nav .btn-gold { padding-inline: 18px; }
+      .approach-track { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px 28px; }
+      .method-step { min-height: auto; padding-right: 0; }
+      .method-step:not(:last-child)::after { display: none; }
+      .method-step:not(:last-child) .step-body::after { display: none; }
+      .framework-layout { grid-template-columns: 1fr; }
+      .framework-intro { position: static; max-width: 620px; }
+      .framework-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .metrics-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .metric { border-bottom: 1px solid rgba(6,31,79,.08); }
+      .metric:nth-child(2n) { border-right: 0; }
+      .metric:last-child { grid-column: span 2; }
+    }
+
+    @media (max-width: 890px) {
+      .hamburger { display: inline-flex; margin-left: auto; }
+      .nav { height: 74px; }
+      .nav-links,
+      .nav > .btn-gold { display: none; }
+      .nav-panel {
+        position: fixed;
+        top: 74px;
+        right: 16px;
+        left: 16px;
+        display: grid;
+        gap: 6px;
+        padding: 16px;
+        border: 1px solid rgba(6,31,79,.10);
+        border-radius: 14px;
+        background: rgba(255,255,255,.98);
+        box-shadow: var(--shadow-soft);
+        transform: translateY(-16px) scale(.98);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .25s ease, transform .25s var(--ease);
+      }
+      .menu-open .nav-panel { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
+      .nav-panel a { text-decoration: none; color: var(--navy); font-weight: 700; padding: 14px 12px; border-radius: 10px; }
+      .nav-panel a:hover { background: rgba(217,154,28,.09); }
+      .nav-panel .btn { color: #fff; margin-top: 8px; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .industry-card { max-width: 640px; }
+      .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cta-panel { flex-direction: column; align-items: flex-start; }
+      .cta-panel .btn { width: 100%; }
+    }
+
+    @media (min-width: 891px) {
+      .nav-panel { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .container, .nav { width: min(calc(100% - 28px), var(--max)); }
+      .brand-word strong { font-size: 1.14rem; letter-spacing: .19em; }
+      .brand-word small { font-size: .48rem; }
+      .brand-mark { width: 36px; height: 36px; }
+      .hero { padding: 36px 0 64px; }
+      .breadcrumb { flex-wrap: wrap; margin-bottom: 34px; }
+      h1 { font-size: clamp(3rem, 16vw, 4rem); }
+      .industry-content { grid-template-columns: 1fr; gap: 12px; }
+      .industry-icon { width: 72px; height: 72px; }
+      .industry-facts { gap: 20px; }
+      .section { padding: 58px 0; }
+      .approach-track,
+      .framework-grid,
+      .metrics-row { grid-template-columns: 1fr; }
+      .metric, .metric:nth-child(2n), .metric:last-child { border-right: 0; grid-column: auto; }
+      .framework-card { min-height: auto; }
+      .cta-panel { padding: 26px 22px; }
+      .cta-left { align-items: flex-start; flex-direction: column; gap: 16px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+<style id="flortran-unified">
+/* ===================== FLORTRAN UNIFIED SYSTEM ===================== */
+:root{
+  --gold:#C49A2A; --gold-light:#E8C55A; --gold-muted:#A07E22;
+  --navy:#0E1A2B; --navy-mid:#162338; --navy-light:#1E3050;
+  --cream:#FAF7F2; --white:#FFFFFF;
+  --text-dark:#0E1A2B; --text-mid:#3D4F66; --text-light:#6B7E96;
+  --font-display:'Cormorant Garamond',Georgia,serif;
+  --font-body:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono:'Space Mono','DM Sans',monospace;
+  --serif:'Cormorant Garamond',Georgia,serif;     /* legal pages */
+  --sans:'DM Sans',-apple-system,sans-serif;       /* legal pages (replaces Jost) */
+  --ease-out:cubic-bezier(0.16,1,0.3,1);
+}
+body{font-family:var(--font-body);}
+
+/* ---------- NAVBAR ---------- */
+#navbar{
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  display:flex; align-items:center; justify-content:space-between; gap:1.5rem;
+  padding:16px clamp(20px,5vw,64px);
+  background:rgba(250,247,242,0.82);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(196,154,42,0.15);
+  transition:padding .35s var(--ease-out), background .35s ease, box-shadow .35s ease;
+}
+#navbar.scrolled{ padding:10px clamp(20px,5vw,64px); background:rgba(250,247,242,0.97); box-shadow:0 6px 30px rgba(14,26,43,0.08); }
+#navbar .nav-logo{ display:inline-flex; align-items:center; gap:12px; text-decoration:none; flex-shrink:0; }
+#navbar .nav-logo .logo-icon{ height:50px; width:auto; display:block; transition:height .35s var(--ease-out); }
+#navbar.scrolled .nav-logo .logo-icon{ height:44px; }
+.nav-logo .logo-text{ display:flex; flex-direction:column; line-height:1; }
+.nav-logo .logo-name{ font-family:var(--font-display); font-size:1.45rem; font-weight:600; letter-spacing:.14em; color:var(--navy); }
+.nav-logo .logo-tagline{ font-family:var(--font-body); font-size:.58rem; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--gold-muted); margin-top:4px; }
+.nav-drawer{ display:contents; }
+.nav-links{ display:flex; align-items:center; gap:2.1rem; list-style:none; margin:0 auto; padding:0; }
+.nav-links li{ margin:0; }
+.nav-links a{ font-family:var(--font-body); font-size:.9rem; font-weight:500; color:var(--text-mid); text-decoration:none; position:relative; padding:4px 0; transition:color .25s; white-space:nowrap; }
+.nav-links a::after{ content:""; position:absolute; left:0; bottom:-3px; height:1.5px; width:0; background:var(--gold); transition:width .3s var(--ease-out); }
+.nav-links a:hover, .nav-links a.active{ color:var(--navy); }
+.nav-links a:hover::after, .nav-links a.active::after{ width:100%; }
+.nav-cta{ flex-shrink:0; }
+
+/* ---------- HAMBURGER ---------- */
+.hamburger{ display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:6px; z-index:1002; }
+.hamburger span{ display:block; width:24px; height:2px; background:var(--navy); border-radius:2px; transition:transform .35s var(--ease-out), opacity .25s ease; }
+#navbar.menu-open .hamburger span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+#navbar.menu-open .hamburger span:nth-child(2){ opacity:0; }
+#navbar.menu-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+/* ---------- UNIFIED BUTTONS ---------- */
+.btn-cta,.btn-gold,.btn.btn-gold,.cta-btn,.btn-navy,.btn-download,
+.btn-outline,.btn.btn-outline,.btn-ghost,.btn-ghost-d,.btn-linkedin{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  font-family:var(--font-body); font-size:.875rem; font-weight:600; letter-spacing:.02em;
+  line-height:1; padding:12px 26px; border-radius:4px; border:1.5px solid transparent;
+  text-decoration:none; cursor:pointer; white-space:nowrap;
+  transition:background .3s ease, color .3s ease, border-color .3s ease, transform .3s var(--ease-out), box-shadow .3s ease;
+}
+/* primary (gold fill, white text) */
+.btn-cta,.btn-gold,.btn.btn-gold,.cta-btn,.btn-download{ background:var(--gold); color:var(--white)!important; border-color:var(--gold); }
+.btn-cta:hover,.btn-gold:hover,.btn.btn-gold:hover,.cta-btn:hover,.btn-download:hover{ background:var(--gold-muted); border-color:var(--gold-muted); color:var(--white)!important; transform:translateY(-2px); box-shadow:0 10px 30px rgba(196,154,42,.28); }
+/* secondary (navy fill, white text) */
+.btn-navy{ background:var(--navy); color:var(--white)!important; border-color:var(--navy); }
+.btn-navy:hover{ background:var(--navy-light); border-color:var(--navy-light); color:var(--white)!important; transform:translateY(-2px); box-shadow:0 10px 30px rgba(14,26,43,.22); }
+/* outline on light backgrounds */
+.btn-outline,.btn.btn-outline,.btn-ghost,.btn-linkedin{ background:transparent; color:var(--navy)!important; border-color:rgba(14,26,43,.24); }
+.btn-outline:hover,.btn.btn-outline:hover,.btn-ghost:hover,.btn-linkedin:hover{ border-color:var(--gold); color:var(--gold)!important; transform:translateY(-2px); }
+/* outline on dark backgrounds */
+.btn-ghost-d{ background:transparent; color:var(--white)!important; border-color:rgba(255,255,255,.32); }
+.btn-ghost-d:hover{ border-color:var(--gold-light); color:var(--gold-light)!important; transform:translateY(-2px); }
+/* large modifier */
+.btn-lg,.btn.btn-lg{ padding:15px 34px!important; font-size:.95rem!important; }
+.btn-download{ width:100%; }
+
+/* social / icon buttons */
+.footer-socials{ display:flex; gap:12px; }
+.social-btn{ width:40px; height:40px; padding:0; border-radius:8px; display:inline-flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:rgba(255,255,255,.8);
+  transition:background .25s, border-color .25s, color .25s, transform .25s; }
+.social-btn svg{ width:18px; height:18px; }
+.social-btn:hover{ background:var(--gold); border-color:var(--gold); color:var(--white); transform:translateY(-2px); }
+
+/* ---------- UNIFIED FOOTER ---------- */
+footer{ background:var(--navy); color:rgba(255,255,255,.72); padding:72px clamp(20px,5vw,64px) 32px; font-family:var(--font-body); }
+.footer-grid{ display:grid; grid-template-columns:1.6fr 1fr 1fr 1.2fr; gap:3rem; max-width:1240px; margin:0 auto; }
+.footer-brand .footer-logo{ display:inline-flex; align-items:center; }
+.footer-brand .footer-logo .logo-icon{ height:50px; width:auto; display:block; }
+.footer-brand .footer-logo .logo-name{ color:#fff!important; }
+.footer-brand .footer-logo .logo-tagline{ color:var(--gold-light); }
+.footer-brand>p{ margin:18px 0 22px; font-size:.92rem; line-height:1.7; max-width:34ch; color:rgba(255,255,255,.6); }
+.footer-col h4{ font-family:var(--font-body); font-size:.78rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-light); margin:0 0 18px; }
+.footer-col ul{ list-style:none; margin:0; padding:0; }
+.footer-col li{ margin-bottom:12px; }
+.footer-col a{ color:rgba(255,255,255,.68); text-decoration:none; font-size:.92rem; display:inline-flex; align-items:center; gap:6px; transition:color .25s, gap .25s; }
+.footer-col a:hover{ color:var(--gold-light); gap:10px; }
+.footer-col a .lk-arrow{ width:11px; height:11px; opacity:.6; }
+.footer-connect p{ font-size:.9rem; line-height:1.6; margin:0 0 18px; color:rgba(255,255,255,.6); }
+.footer-bottom{ display:flex; align-items:center; justify-content:space-between; gap:14px; max-width:1240px; margin:48px auto 0; padding-top:24px; border-top:1px solid rgba(255,255,255,.1); font-size:.84rem; color:rgba(255,255,255,.5); }
+.footer-bottom-links{ display:flex; gap:24px; }
+.footer-bottom-links a{ color:rgba(255,255,255,.6); text-decoration:none; transition:color .25s; }
+.footer-bottom-links a:hover{ color:var(--gold-light); }
+
+/* ---------- MOBILE ---------- */
+@media (max-width:980px){
+  .hamburger{ display:flex; }
+  .nav-drawer{
+    display:flex; flex-direction:column; align-items:flex-start; gap:0;
+    position:fixed; top:0; right:0; height:100vh; width:min(82vw,360px);
+    padding:104px 34px 40px; margin:0;
+    background:var(--navy); box-shadow:-24px 0 70px rgba(0,0,0,.35);
+    transform:translateX(105%); transition:transform .42s var(--ease-out); z-index:1001; overflow-y:auto;
+  }
+  #navbar.menu-open .nav-drawer{ transform:translateX(0); }
+  .nav-links{ flex-direction:column; align-items:stretch; gap:0; margin:0; width:100%; }
+  .nav-links li{ width:100%; border-bottom:1px solid rgba(255,255,255,.09); }
+  .nav-links a{ display:block; width:100%; padding:17px 2px; font-size:1.05rem; color:rgba(255,255,255,.85); }
+  .nav-links a::after{ display:none; }
+  .nav-links a:hover, .nav-links a.active{ color:var(--gold-light); }
+  .nav-cta{ margin-top:26px; width:100%; }
+  body.nav-locked{ overflow:hidden; }
+  #navbar.menu-open::before{ content:""; position:fixed; inset:0; background:rgba(14,26,43,.55); z-index:1000; -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px); }
+  .footer-grid{ grid-template-columns:1fr 1fr; gap:2.2rem; }
+  .footer-bottom{ flex-direction:column; gap:12px; text-align:center; }
+}
+@media (max-width:560px){
+  .footer-grid{ grid-template-columns:1fr; gap:2rem; }
+  #navbar .nav-logo .logo-icon{ height:44px; }
+}
+</style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar" aria-hidden="true"></div>
+  <div class="page-shell">
+    <div class="ambient" aria-hidden="true"><span></span><span></span><span></span></div>
+
+    <header class="site-header" id="siteHeader">
+      <nav id="navbar">
+  <a class="nav-logo" href="index.html" aria-label="Flortran home">
+    <img class="logo-icon" src="flortran-logo-header.png" alt="Flortran — Finance. Advice. Transcend." />
+    
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-drawer" id="nav-drawer">
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="case-study.html" class="active">Case Studies</a></li>
+        <li><a href="credentials.html">Credentials</a></li>
+        <li><a href="free-resource.html">Free Resource</a></li>
+    </ul>
+    <a class="btn-cta nav-cta" href="book-consultation.html#book">Book Consultation</a>
+  </div>
+</nav>
+    </header>
+
+    <main>
+      <section class="hero" id="top">
+        <div class="container">
+          <div class="breadcrumb reveal">
+            <a href="case-study.html">Case Studies</a>
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3.5L10.5 8L6 12.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Island-Market Restaurant Concept Modeled</span>
+          </div>
+
+          <div class="hero-grid">
+            <div class="hero-copy-block reveal delay-1">
+              <div class="case-kicker"><span>02</span> QSR Market-Entry Financial Model</div>
+              <h1>View Methodology</h1>
+              <p class="hero-copy">A comprehensive, scenario-driven approach to evaluate the feasibility and funding strategy for a quick service restaurant concept in an island market.</p>
+              <a class="back-link" href="case-study.html">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Back to Case Study Overview
+              </a>
+            </div>
+
+            <aside class="industry-card tilt-card reveal delay-2" aria-label="Case study details">
+              <div class="industry-content">
+                <div class="industry-icon" aria-hidden="true" style="color: var(--gold);">
+                  <svg viewBox="0 0 94 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M27 14v24c0 6.1 4.9 11 11 11h1v31" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M18 14v20M27 14v20M36 14v20" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M65 14c8.2 6.7 11.4 16.6 9.7 29.8-.9 6.9-5.1 11.9-11.7 14.2v22" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M57 15v34" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="industry-facts">
+                  <div>
+                    <div class="fact-label">Industry</div>
+                    <div class="fact-value">Quick Service Restaurant</div>
+                  </div>
+                  <div>
+                    <div class="fact-label">Engagement Type</div>
+                    <div class="fact-value">Financial Modeling</div>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="approach">
+        <div class="container">
+          <div class="section-head reveal">
+            <h2 class="section-title">Our Approach</h2>
+            <p class="section-lead">We built a full 3-statement financial model and ran scenario, pricing, and cost structure analysis to assess feasibility and maximize investor confidence.</p>
+          </div>
+
+          <div class="approach-track reveal process-row" id="processRow">
+            <article class="method-step" style="--i:0">
+              <div class="step-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><circle cx="20.5" cy="20.5" r="10.5" stroke="currentColor" stroke-width="3"/><path d="M29 29L39 39" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+              </div>
+              <div class="step-body">
+                <h3 class="step-title"><span class="step-num">01</span> Market & Concept Assessment</h3>
+                <p class="step-copy">Assessed market size, demand drivers, competitive landscape, and concept fit for the island market.</p>
+              </div>
+            </article>
+
+            <article class="method-step" style="--i:1">
+              <div class="step-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><path d="M14 8H34V40H14V8Z" stroke="currentColor" stroke-width="3"/><path d="M19 16H29M19 23H31M19 30H26" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M32 11H37V35H34" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+              </div>
+              <div class="step-body">
+                <h3 class="step-title"><span class="step-num">02</span> Model Build (3-Statement)</h3>
+                <p class="step-copy">Developed integrated income statement, balance sheet, and cash flow statement with key operating assumptions.</p>
+              </div>
+            </article>
+
+            <article class="method-step" style="--i:2">
+              <div class="step-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><path d="M10 39H39" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M14 35V25M23 35V18M32 35V11" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M13 19l8-7 7 6 10-11" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="step-body">
+                <h3 class="step-title"><span class="step-num">03</span> Scenario & Sensitivity Analysis</h3>
+                <p class="step-copy">Tested multiple scenarios and key sensitivities to understand risk, upside potential, and break-even drivers.</p>
+              </div>
+            </article>
+
+            <article class="method-step" style="--i:3">
+              <div class="step-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="15" stroke="currentColor" stroke-width="3"/><circle cx="24" cy="24" r="7" stroke="currentColor" stroke-width="3"/><path d="M24 9v6M24 33v6M9 24h6M33 24h6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M24 24l8-8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+              </div>
+              <div class="step-body">
+                <h3 class="step-title"><span class="step-num">04</span> Funding & ROI Assessment</h3>
+                <p class="step-copy">Evaluated funding requirements, return on investment, and payback periods across different scenarios.</p>
+              </div>
+            </article>
+
+            <article class="method-step" style="--i:4">
+              <div class="step-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><path d="M14 8H31L38 15V40H14V8Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M31 8V16H38" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M20 24H29M20 30H26" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="34" cy="33" r="6" fill="#fff" stroke="currentColor" stroke-width="3"/><path d="M31.5 33l1.7 1.7 3.4-3.8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="step-body">
+                <h3 class="step-title"><span class="step-num">05</span> Deliver Insights & Recommendations</h3>
+                <p class="step-copy">Delivered a clear feasibility outlook with actionable recommendations for stakeholders.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="frameworks">
+        <div class="container framework-layout">
+          <div class="framework-intro reveal">
+            <h2 class="section-title">Key Methodological Frameworks</h2>
+            <p class="section-lead">We used proven financial modeling and analysis techniques to ensure accuracy, transparency, and decision readiness.</p>
+          </div>
+
+          <div class="framework-grid qsr-framework-grid">
+            <article class="framework-card tilt-card reveal delay-1">
+              <div class="framework-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><rect x="11" y="8" width="26" height="32" rx="2" stroke="currentColor" stroke-width="3"/><path d="M17 17H31M17 24H20M24 24H31M17 31H20M24 31H31" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+              </div>
+              <h3>3-Statement Financial Model</h3>
+              <p>Integrated model linking income statement, balance sheet, and cash flow to capture the full financial picture.</p>
+            </article>
+
+            <article class="framework-card tilt-card reveal delay-2">
+              <div class="framework-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><path d="M24 6l16 9v18l-16 9-16-9V15l16-9Z" stroke="currentColor" stroke-width="3"/><path d="M8 15l16 9 16-9M24 24v18M16 10l16 9" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+              </div>
+              <h3>Scenario Analysis</h3>
+              <p>Constructed best case, base case, and downside scenarios to evaluate performance across different market conditions.</p>
+            </article>
+
+            <article class="framework-card tilt-card reveal delay-3">
+              <div class="framework-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><path d="M10 39H39" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M10 39V9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M16 31l7-8 6 4 8-14" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M34 13h4v4" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <h3>Sensitivity Analysis</h3>
+              <p>Tested key variables including pricing, COGS, labor, and volume to identify the biggest impact drivers.</p>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="highlights">
+        <div class="container">
+          <div class="section-head reveal">
+            <h2 class="section-title">Model Insights Delivered</h2>
+            <p class="section-lead">Actionable outputs that empowered stakeholders to make informed decisions.</p>
+          </div>
+
+          <div class="metrics-row reveal">
+            <article class="metric">
+              <div class="metric-badge" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><path d="M24 10v28M31 16c-2-3-12-4-12 2 0 7 13 4 13 12 0 6-10 6-15 2" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+              </div>
+              <div>
+                <div class="metric-value"><span class="counter" data-prefix="$" data-target="3.42" data-suffix="M" data-decimals="2">$0M</span></div>
+                <div class="metric-copy">Total Project Cost estimated for market entry and setup.</div>
+              </div>
+            </article>
+
+            <article class="metric">
+              <div class="metric-badge" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><path d="M38 17A16 16 0 0 0 10 14l-3 4M10 31a16 16 0 0 0 28 3l3-4" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 18h9M41 30h-9" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+              </div>
+              <div>
+                <div class="metric-value"><span class="counter" data-target="23.7" data-suffix="%" data-decimals="1">0%</span></div>
+                <div class="metric-copy">Projected 5-Year IRR indicating strong investment potential.</div>
+              </div>
+            </article>
+
+            <article class="metric">
+              <div class="metric-badge" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><rect x="10" y="12" width="28" height="26" rx="3" stroke="currentColor" stroke-width="3"/><path d="M17 8v8M31 8v8M10 20h28M17 27h4M25 27h4M17 33h4M25 33h4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+              </div>
+              <div>
+                <div class="metric-value"><span class="counter" data-target="18" data-suffix=" Months" data-decimals="0">0 Months</span></div>
+                <div class="metric-copy">Break-even timeline under base case scenario.</div>
+              </div>
+            </article>
+
+            <article class="metric">
+              <div class="metric-badge" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><path d="M24 7a17 17 0 1 1-12 29" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M24 7v17h17" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 24L12 36" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+              </div>
+              <div>
+                <div class="metric-value"><span class="counter" data-target="5.6" data-suffix="x" data-decimals="1">0x</span></div>
+                <div class="metric-copy">Projected Inventory Turnover for efficient operations.</div>
+              </div>
+            </article>
+
+            <article class="metric">
+              <div class="metric-badge" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="17" stroke="currentColor" stroke-width="3"/><path d="M16 24l5 5 11-12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div>
+                <div class="metric-value"><span class="counter" data-target="1.68" data-suffix="x" data-decimals="2">0x</span></div>
+                <div class="metric-copy">DSCR (Year 1) showing strong debt service coverage.</div>
+              </div>
+            </article>
+          </div>
+
+          <div class="cta-panel reveal delay-2">
+            <div class="cta-left">
+              <div class="cta-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none"><rect x="11" y="12" width="26" height="26" rx="2" stroke="currentColor" stroke-width="3"/><path d="M17 8v8M31 8v8M11 20h26M17 27h4M25 27h4M17 33h4M25 33h4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+              </div>
+              <div>
+                <h3>Want to see similar results for your business?</h3>
+                <p>Let's build a model that drives clarity, confidence, and growth.</p>
+              </div>
+            </div>
+            <a class="btn btn-gold" href="book-consultation.html#book">Request a Similar Review <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo footer-logo" href="index.html" aria-label="Flortran home">
+        <img class="logo-icon" src="flortran-logo-footer.png" alt="Flortran" />
+        
+      </a>
+      <p>We partner with founders and businesses to create clarity, build investor confidence, and transcend limitations—through numbers that tell a compelling story.</p>
+      <div class="footer-socials">
+        <a class="social-btn" aria-label="LinkedIn" href="https://www.linkedin.com" rel="noopener" target="_blank"><svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0zM.5 8h4V24h-4V8zM8 8h3.8v2.2h.05c.53-1 1.83-2.2 3.77-2.2 4.03 0 4.78 2.65 4.78 6.1V24h-4v-7c0-1.67-.03-3.8-2.32-3.8-2.32 0-2.68 1.8-2.68 3.68V24H8V8z"></path></svg></a>
+        <a class="social-btn" aria-label="Email" href="mailto:hello@flortran.com"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><path d="M22 6l-10 7L2 6"></path></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="services.html#business-valuation">Business Valuation <svg class="lk-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4"></path></svg></a></li>
+        <li><a href="services.html#financial-modeling">Financial Modeling <svg class="lk-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4"></path></svg></a></li>
+        <li><a href="services.html#investment-readiness-review">Investment Readiness Review <svg class="lk-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4"></path></svg></a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="case-study.html">Case Studies</a></li>
+        <li><a href="credentials.html">Credentials</a></li>
+        <li><a href="free-resource.html">Free Resource</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-connect">
+      <h4>Let's Connect</h4>
+      <p>Have a project in mind? Let's build your investment story.</p>
+      <a class="btn-cta" href="book-consultation.html#book">Book a Consultation <svg class="lk-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4"></path></svg></a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Flortran Advisory &amp; Consulting. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-of-use.html">Terms of Use</a>
+    </div>
+  </div>
+</footer>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const header = (document.getElementById('siteHeader')||document.createElement('div'));
+      const progress = (document.getElementById('progressBar')||{style:{}});
+      const hamburger = document.getElementById('hamburger');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const updateScrollState = () => {
+        const max = document.body.scrollHeight - window.innerHeight;
+        const progressValue = max > 0 ? (window.scrollY / max) * 100 : 0;
+        progress.style.width = `${progressValue}%`;
+        header.classList.toggle('is-scrolled', window.scrollY > 24);
+      };
+
+      updateScrollState();
+      window.addEventListener('scroll', updateScrollState, { passive: true });
+
+      hamburger?.addEventListener('click', () => {
+        const isOpen = header.classList.toggle('menu-open');
+        hamburger.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      document.addEventListener('click', (event) => {
+        if (!header.contains(event.target)) {
+          header.classList.remove('menu-open');
+          hamburger?.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      const revealItems = [...document.querySelectorAll('.reveal')];
+      const counterItems = [...document.querySelectorAll('.counter')];
+
+      const animateCounter = (el) => {
+        if (el.dataset.done === 'true') return;
+        el.dataset.done = 'true';
+
+        const target = parseFloat(el.dataset.target || '0');
+        const decimals = parseInt(el.dataset.decimals || '0', 10);
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        const duration = reducedMotion ? 0 : 1400;
+        const start = performance.now();
+
+        const tick = (now) => {
+          const pct = duration === 0 ? 1 : Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - pct, 3);
+          const value = target * eased;
+          el.textContent = `${prefix}${value.toFixed(decimals)}${suffix}`;
+          if (pct < 1) requestAnimationFrame(tick);
+        };
+
+        requestAnimationFrame(tick);
+      };
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('visible');
+            if (entry.target.classList.contains('process-row')) entry.target.classList.add('visible');
+            entry.target.querySelectorAll?.('.counter').forEach(animateCounter);
+            observer.unobserve(entry.target);
+          });
+        }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+
+        revealItems.forEach((item) => observer.observe(item));
+      } else {
+        revealItems.forEach((item) => item.classList.add('visible'));
+        counterItems.forEach(animateCounter);
+      }
+
+      const metricRow = document.querySelector('.metrics-row');
+      if (metricRow && 'IntersectionObserver' in window) {
+        const counterObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            counterItems.forEach(animateCounter);
+            counterObserver.disconnect();
+          });
+        }, { threshold: .3 });
+        counterObserver.observe(metricRow);
+      }
+
+      if (!reducedMotion) {
+        document.querySelectorAll('.tilt-card').forEach((card) => {
+          card.addEventListener('pointermove', (event) => {
+            const rect = card.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const rotateX = ((y / rect.height) - .5) * -5;
+            const rotateY = ((x / rect.width) - .5) * 5;
+            card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-3px)`;
+          });
+          card.addEventListener('pointerleave', () => {
+            card.style.transform = '';
+          });
+        });
+      }
+
+      let raf = null;
+      window.addEventListener('mousemove', (event) => {
+        if (reducedMotion) return;
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          const x = (event.clientX / window.innerWidth - .5) * 20;
+          const y = (event.clientY / window.innerHeight - .5) * 20;
+          root.style.setProperty('--mouse-x', `${x}px`);
+          root.style.setProperty('--mouse-y', `${y}px`);
+        });
+      }, { passive: true });
+    })();
+  </script>
+<script id="flortran-nav-js">
+(function(){
+  var nav=document.getElementById('navbar');
+  var burger=document.getElementById('hamburger');
+  var drawer=document.getElementById('nav-drawer');
+  if(burger&&nav){
+    burger.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=nav.classList.toggle('menu-open');
+      document.body.classList.toggle('nav-locked',open);
+      burger.setAttribute('aria-expanded',open?'true':'false');
+      burger.setAttribute('aria-label',open?'Close menu':'Open menu');
+    });
+    if(drawer){
+      drawer.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click',function(){
+          nav.classList.remove('menu-open');
+          document.body.classList.remove('nav-locked');
+          burger.setAttribute('aria-expanded','false');
+          burger.setAttribute('aria-label','Open menu');
+        });
+      });
+    }
+    document.addEventListener('keydown',function(ev){
+      if(ev.key==='Escape'&&nav.classList.contains('menu-open')){
+        nav.classList.remove('menu-open'); document.body.classList.remove('nav-locked');
+        burger.setAttribute('aria-expanded','false'); burger.setAttribute('aria-label','Open menu');
+      }
+    });
+  }
+  function onScroll(){ if(nav) nav.classList.toggle('scrolled', window.scrollY>30); }
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+})();
+</script>
+</body>
+</html>

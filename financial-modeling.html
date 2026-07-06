@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Financial Modeling — Flortran Advisory &amp; Consulting</title>
+<meta name="description" content="Integrated 3-statement models, scenario planning tools, and forecasting systems that deliver investor-ready outputs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ease:cubic-bezier(.16,1,.3,1);
+    --border:#E4DED2; --border-soft:#ECE7DC;
+    --green:#1E7F4F;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--cream);color:var(--text-dark);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  img{max-width:100%}
+  #prog{position:fixed;top:0;left:0;height:2px;background:var(--gold);width:0;z-index:1200}
+  .cur,.cur-r{position:fixed;border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
+  .cur{width:10px;height:10px;background:var(--gold)}
+  .cur-r{width:36px;height:36px;border:1.5px solid rgba(196,154,42,.5);transition:width .3s var(--ease),height .3s var(--ease)}
+  body:has(a:hover) .cur-r,body:has(button:hover) .cur-r{width:52px;height:52px}
+  @media (hover:none),(pointer:coarse){.cur,.cur-r{display:none!important}}
+
+  /* ---------- SECTION SHELL ---------- */
+  .wrap{max-width:1160px;margin:0 auto;padding:0 5%}
+  section{padding:54px 0}
+  .sec-title{font-family:var(--font-display);font-size:clamp(1.7rem,3vw,2.3rem);font-weight:600;color:var(--navy);display:flex;align-items:center;gap:16px;margin-bottom:34px}
+  .sec-title::after{content:'';flex:0 0 46px;height:2px;background:var(--gold)}
+
+  /* ---------- HERO ---------- */
+  .hero{margin-top:82px;padding:64px 0 46px}
+  .hero-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:52px;align-items:start}
+  .eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:.72rem;letter-spacing:.25em;font-weight:600;color:var(--gold);text-transform:uppercase;margin-bottom:22px}
+  .eyebrow::after{content:'';width:40px;height:1px;background:var(--gold)}
+  .hero-h1{font-family:var(--font-display);font-size:clamp(2.5rem,4.8vw,4rem);font-weight:600;line-height:1.06;color:var(--navy);margin-bottom:22px}
+  .hero-sub{font-size:1rem;line-height:1.75;color:var(--text-mid);max-width:470px;font-weight:300;margin-bottom:30px}
+  .hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:34px}
+  .tagline-rule{display:inline-flex;align-items:center;gap:14px;font-size:.68rem;letter-spacing:.3em;font-weight:600;color:var(--navy);text-transform:uppercase}
+  .tagline-rule::before{content:'';width:34px;height:1px;background:var(--gold)}
+
+  /* ---------- MODEL OVERVIEW CARD ---------- */
+  .model-card{background:var(--white);border:1px solid var(--border-soft);border-radius:14px;box-shadow:0 14px 60px rgba(14,26,43,.09);overflow:hidden}
+  .mc-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 22px;border-bottom:1px solid var(--border-soft);flex-wrap:wrap}
+  .mc-title{font-size:.68rem;letter-spacing:.18em;font-weight:700;text-transform:uppercase;color:var(--navy)}
+  .mc-scenarios{display:flex;align-items:center;gap:8px}
+  .mc-scen-label{font-size:.64rem;letter-spacing:.08em;color:var(--text-light);text-transform:uppercase;margin-right:2px}
+  .scen-btn{font-family:var(--font-body);font-size:.68rem;font-weight:600;letter-spacing:.04em;padding:6px 13px;border-radius:5px;border:1px solid var(--border);background:var(--white);color:var(--text-mid);cursor:pointer;transition:all .25s ease}
+  .scen-btn:hover{border-color:var(--gold)}
+  .scen-btn.on{background:var(--navy);border-color:var(--navy);color:var(--white)}
+  .mc-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:18px 22px;border-bottom:1px solid var(--border-soft)}
+  .metric{background:var(--cream);border:1px solid var(--border-soft);border-radius:9px;padding:13px 14px}
+  .m-lab{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-light);margin-bottom:7px;white-space:nowrap}
+  .m-val{font-family:var(--font-display);font-size:1.5rem;font-weight:600;color:var(--navy);line-height:1;margin-bottom:6px}
+  .m-delta{font-size:.62rem;color:var(--text-light)}
+  .m-delta b{color:var(--green);font-weight:600}
+  .mc-body{display:grid;grid-template-columns:.85fr 1.35fr;gap:0}
+  .mc-assump{padding:18px 22px;border-right:1px solid var(--border-soft)}
+  .mc-sec-lab{font-size:.62rem;letter-spacing:.16em;font-weight:700;text-transform:uppercase;color:var(--navy);margin-bottom:14px}
+  .arow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px solid var(--border-soft);font-size:.76rem}
+  .arow:last-of-type{border-bottom:none}
+  .a-name{color:var(--text-mid)}
+  .a-val{font-family:var(--font-mono);font-size:.72rem;font-weight:700;color:var(--navy)}
+  .a-link{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:.72rem;font-weight:600;color:var(--gold-muted);text-decoration:none}
+  .a-link:hover{color:var(--gold)}
+  .mc-chart{padding:18px 22px 20px}
+  .chart-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  .legend{display:flex;gap:14px;font-size:.62rem;color:var(--text-mid)}
+  .lg{display:inline-flex;align-items:center;gap:5px}
+  .sw{width:9px;height:9px;border-radius:2px}
+  .sw.rev{background:var(--navy)} .sw.ebd{background:var(--gold)}
+  .sw.fcf{width:12px;height:2px;border-radius:0;background:#9AA7B8}
+  .chart{position:relative;height:190px}
+  .gridlines{position:absolute;inset:0 0 22px 34px}
+  .gl{position:absolute;left:0;right:0;border-top:1px dashed var(--border-soft)}
+  .ylab{position:absolute;left:0;width:30px;text-align:right;font-size:.56rem;color:var(--text-light);transform:translateY(-50%)}
+  .bars{position:absolute;inset:0 0 22px 34px;display:flex;align-items:flex-end;justify-content:space-around}
+  .bgroup{display:flex;align-items:flex-end;gap:4px;height:100%}
+  .bar{width:15px;border-radius:2px 2px 0 0;transform-origin:bottom;transform:scaleY(0);transition:transform .9s var(--ease)}
+  .bar.rev{background:var(--navy)} .bar.ebd{background:var(--gold)}
+  .chart.drawn .bar{transform:scaleY(1)}
+  .fcf-line{position:absolute;inset:0 0 22px 34px;pointer-events:none}
+  .fcf-line path{fill:none;stroke:#9AA7B8;stroke-width:1.6;stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 1.4s var(--ease) .3s}
+  .fcf-line circle{fill:#fff;stroke:#9AA7B8;stroke-width:1.4;opacity:0;transition:opacity .4s ease 1.2s}
+  .chart.drawn .fcf-line path{stroke-dashoffset:0}
+  .chart.drawn .fcf-line circle{opacity:1}
+  .xlabs{position:absolute;left:34px;right:0;bottom:0;display:flex;justify-content:space-around;font-size:.58rem;color:var(--text-light)}
+
+  /* ---------- FEATURE STRIP ---------- */
+  .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .feat{background:var(--white);border:1px solid var(--border-soft);border-radius:12px;padding:22px 20px;display:flex;gap:15px;align-items:flex-start;transition:transform .3s var(--ease),box-shadow .3s ease}
+  .feat:hover{transform:translateY(-3px);box-shadow:0 12px 34px rgba(14,26,43,.08)}
+  .ic-ring{flex:0 0 46px;width:46px;height:46px;border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold-muted)}
+  .ic-ring svg{width:21px;height:21px}
+  .feat h3{font-family:var(--font-display);font-size:1.02rem;font-weight:700;color:var(--navy);margin-bottom:5px}
+  .feat p{font-size:.76rem;line-height:1.6;color:var(--text-mid)}
+
+  /* ---------- WHAT'S INCLUDED ---------- */
+  .incl-panel{background:var(--white);border:1px solid var(--border-soft);border-radius:12px;padding:26px;display:grid;grid-template-columns:1fr 1fr 1fr 1.05fr;gap:0}
+  .incl-col{padding:0 22px;border-right:1px solid var(--border-soft)}
+  .incl-col:first-child{padding-left:0}
+  .incl-item{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border-soft)}
+  .incl-item:last-child{border-bottom:none}
+  .incl-ic{flex:0 0 22px;color:var(--navy)}
+  .incl-ic svg{width:20px;height:20px;display:block}
+  .incl-num{font-family:var(--font-mono);font-size:.68rem;color:var(--text-light);min-width:14px}
+  .incl-name{font-size:.82rem;font-weight:500;color:var(--navy)}
+  .timeline-tile{margin-left:22px;background:var(--cream);border:1px solid var(--border-soft);border-radius:10px;padding:22px;display:flex;flex-direction:column;justify-content:center;gap:10px;height:100%}
+  .timeline-tile .trend{color:var(--navy)}
+  .tl-lab{display:flex;align-items:center;gap:9px;font-size:.62rem;letter-spacing:.2em;font-weight:700;text-transform:uppercase;color:var(--gold-muted)}
+  .tl-lab svg{width:16px;height:16px}
+  .tl-val{font-family:var(--font-display);font-size:2rem;font-weight:600;color:var(--navy)}
+
+  /* ---------- MODEL TYPES ---------- */
+  .types-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .type-card{background:var(--white);border:1px solid var(--border-soft);border-radius:12px;padding:28px 26px;display:flex;gap:20px;align-items:flex-start;transition:transform .3s var(--ease),box-shadow .3s ease}
+  .type-card:hover{transform:translateY(-3px);box-shadow:0 14px 38px rgba(14,26,43,.08)}
+  .type-card .ic-ring{flex:0 0 62px;width:62px;height:62px}
+  .type-card .ic-ring svg{width:28px;height:28px}
+  .type-card h3{font-family:var(--font-display);font-size:1.15rem;font-weight:700;color:var(--navy);margin-bottom:7px}
+  .type-card p{font-size:.8rem;line-height:1.65;color:var(--text-mid);margin-bottom:12px}
+  .learn{display:inline-flex;align-items:center;gap:7px;font-size:.74rem;font-weight:600;color:var(--gold-muted);text-decoration:none;transition:gap .25s ease,color .25s ease}
+  .learn:hover{gap:11px;color:var(--gold)}
+
+  /* ---------- BEST SUITED ---------- */
+  .suited-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+  .su-item{display:flex;gap:18px;align-items:flex-start;padding:8px 30px;border-right:1px solid var(--border-soft)}
+  .su-item:first-child{padding-left:0}
+  .su-item:last-child{border-right:none}
+  .su-item .ic-ring{flex:0 0 56px;width:56px;height:56px}
+  .su-item .ic-ring svg{width:25px;height:25px}
+  .su-item h3{font-family:var(--font-display);font-size:1.06rem;font-weight:700;color:var(--navy);margin-bottom:6px;line-height:1.3}
+  .su-item p{font-size:.78rem;line-height:1.6;color:var(--text-mid)}
+
+  /* ---------- PROCESS ---------- */
+  .proc-grid{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:18px;align-items:start}
+  .step{text-align:left}
+  .step-num{width:46px;height:46px;border:1.5px solid var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--navy);margin-bottom:14px}
+  .step h3{font-family:var(--font-display);font-size:1.04rem;font-weight:700;color:var(--navy);margin-bottom:6px}
+  .step p{font-size:.76rem;line-height:1.6;color:var(--text-mid)}
+  .proc-arrow{align-self:center;color:var(--gold);padding-top:0}
+  .proc-arrow svg{width:34px;height:12px;display:block}
+
+  /* ---------- CTA BAND ---------- */
+  .cta-band{background:var(--navy);border-radius:14px;padding:40px 44px;display:flex;align-items:center;gap:28px;position:relative;overflow:hidden}
+  .cta-band::before{content:'';position:absolute;right:-60px;top:-80px;width:340px;height:340px;border:1px solid rgba(196,154,42,.16);transform:rotate(45deg);pointer-events:none}
+  .cta-band::after{content:'';position:absolute;right:60px;top:-140px;width:340px;height:340px;border:1px solid rgba(196,154,42,.1);transform:rotate(45deg);pointer-events:none}
+  .cta-logo{flex:0 0 auto;position:relative;z-index:1;animation:float 4s ease-in-out infinite}
+  .cta-logo svg{width:52px;height:52px;display:block}
+  .cta-copy{flex:1;position:relative;z-index:1}
+  .cta-copy h2{font-family:var(--font-display);font-size:clamp(1.5rem,2.6vw,2rem);font-weight:600;color:var(--white);margin-bottom:6px}
+  .cta-copy p{font-size:.86rem;color:rgba(255,255,255,.72)}
+  .cta-band .btn-cta{position:relative;z-index:1}
+
+  /* ---------- ANIMATION ---------- */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .hero-left>*{opacity:0;animation:fadeUp .8s var(--ease) both}
+  .hero-left>*:nth-child(1){animation-delay:.15s}
+  .hero-left>*:nth-child(2){animation-delay:.28s}
+  .hero-left>*:nth-child(3){animation-delay:.4s}
+  .hero-left>*:nth-child(4){animation-delay:.52s}
+  .hero-left>*:nth-child(5){animation-delay:.62s}
+  .model-card{opacity:0;animation:fadeIn 1s var(--ease) .4s forwards}
+  .js-ready .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .js-ready .reveal.visible{opacity:1;transform:translateY(0)}
+  .rd1{transition-delay:.08s!important}.rd2{transition-delay:.16s!important}.rd3{transition-delay:.24s!important}.rd4{transition-delay:.32s!important}
+  @media (prefers-reduced-motion:reduce){
+    .hero-left>*,.model-card{animation:none;opacity:1}
+    .cta-logo{animation:none}
+    .js-ready .reveal{opacity:1;transform:none;transition:none}
+    .bar{transform:scaleY(1);transition:none}
+    .fcf-line path{stroke-dashoffset:0;transition:none}
+    .fcf-line circle{opacity:1;transition:none}
+    html{scroll-behavior:auto}
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media(max-width:1080px){
+    .hero-grid{grid-template-columns:1fr;gap:42px}
+    .feat-grid{grid-template-columns:1fr 1fr}
+    .incl-panel{grid-template-columns:1fr 1fr}
+    .incl-col{padding:0 22px 14px 0;border-right:none}
+    .incl-col:nth-child(odd){border-right:1px solid var(--border-soft);padding-right:22px}
+    .incl-col:nth-child(even){padding-left:22px}
+    .timeline-tile{margin:14px 0 0 0;grid-column:1/-1;height:auto}
+    .types-grid{grid-template-columns:1fr}
+    .suited-grid{grid-template-columns:1fr}
+    .su-item{border-right:none;border-bottom:1px solid var(--border-soft);padding:20px 0}
+    .su-item:last-child{border-bottom:none}
+    .proc-grid{grid-template-columns:1fr;gap:22px}
+    .proc-arrow{display:none}
+  }
+  @media(max-width:720px){
+    .hero{padding:44px 0 36px}
+    .mc-metrics{grid-template-columns:1fr 1fr;padding:16px}
+    .mc-head,.mc-assump,.mc-chart{padding:16px}
+    .mc-body{grid-template-columns:1fr}
+    .mc-assump{border-right:none;border-bottom:1px solid var(--border-soft)}
+    .feat-grid{grid-template-columns:1fr}
+    .incl-panel{grid-template-columns:1fr;padding:20px}
+    .incl-col{border-right:none!important;padding:0!important}
+    .cta-band{flex-direction:column;text-align:center;padding:32px 24px}
+    .cta-band .btn-cta{width:100%;justify-content:center}
+  }
+  @media(max-width:520px){
+    .hero-btns .btn-cta,.hero-btns .btn-outline{width:100%;justify-content:center}
+    .mc-metrics{grid-template-columns:1fr 1fr;gap:9px}
+    .m-val{font-size:1.3rem}
+    .scen-btn{padding:5px 10px}
+    .chart{height:160px}
+  }
+</style>
+<style id="flortran-unified">
+/* ===================== FLORTRAN UNIFIED SYSTEM ===================== */
+:root{
+  --gold:#C49A2A; --gold-light:#E8C55A; --gold-muted:#A07E22;
+  --navy:#0E1A2B; --navy-mid:#162338; --navy-light:#1E3050;
+  --cream:#FAF7F2; --white:#FFFFFF;
+  --text-dark:#0E1A2B; --text-mid:#3D4F66; --text-light:#6B7E96;
+  --font-display:'Cormorant Garamond',Georgia,serif;
+  --font-body:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono:'Space Mono','DM Sans',monospace;
+  --serif:'Cormorant Garamond',Georgia,serif;     /* legal pages */
+  --sans:'DM Sans',-apple-system,sans-serif;       /* legal pages (replaces Jost) */
+  --ease-out:cubic-bezier(0.16,1,0.3,1);
+}
+body{font-family:var(--font-body);}
+
+/* ---------- NAVBAR ---------- */
+#navbar{
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  display:flex; align-items:center; justify-content:space-between; gap:1.5rem;
+  padding:16px clamp(20px,5vw,64px);
+  background:rgba(250,247,242,0.82);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(196,154,42,0.15);
+  transition:padding .35s var(--ease-out), background .35s ease, box-shadow .35s ease;
+}
+#navbar.scrolled{ padding:10px clamp(20px,5vw,64px); background:rgba(250,247,242,0.97); box-shadow:0 6px 30px rgba(14,26,43,0.08); }
+#navbar .nav-logo{ display:inline-flex; align-items:center; gap:12px; text-decoration:none; flex-shrink:0; }
+#navbar .nav-logo .logo-icon{ height:50px; width:auto; display:block; transition:height .35s var(--ease-out); }
+#navbar.scrolled .nav-logo .logo-icon{ height:44px; }
+.nav-logo .logo-text{ display:flex; flex-direction:column; line-height:1; }
+.nav-logo .logo-name{ font-family:var(--font-display); font-size:1.45rem; font-weight:600; letter-spacing:.14em; color:var(--navy); }
+.nav-logo .logo-tagline{ font-family:var(--font-body); font-size:.58rem; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--gold-muted); margin-top:4px; }
+.nav-drawer{ display:contents; }
+.nav-links{ display:flex; align-items:center; gap:2.1rem; list-style:none; margin:0 auto; padding:0; }
+.nav-links li{ margin:0; }
+.nav-links a{ font-family:var(--font-body); font-size:.9rem; font-weight:500; color:var(--text-mid); text-decoration:none; position:relative; padding:4px 0; transition:color .25s; white-space:nowrap; }
+.nav-links a::after{ content:""; position:absolute; left:0; bottom:-3px; height:1.5px; width:0; background:var(--gold); transition:width .3s var(--ease-out); }
+.nav-links a:hover, .nav-links a.active{ color:var(--navy); }
+.nav-links a:hover::after, .nav-links a.active::after{ width:100%; }
+.nav-cta{ flex-shrink:0; }
+
+/* ---------- HAMBURGER ---------- */
+.hamburger{ display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:6px; z-index:1002; }
+.hamburger span{ display:block; width:24px; height:2px; background:var(--navy); border-radius:2px; transition:transform .35s var(--ease-out), opacity .25s ease; }
+#navbar.menu-open .hamburger span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+#navbar.menu-open .hamburger span:nth-child(2){ opacity:0; }
+#navbar.menu-open .hamburger span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+/* ---------- UNIFIED BUTTONS ---------- */
+.btn-cta,.btn-gold,.btn.btn-gold,.cta-btn,.btn-navy,.btn-download,
+.btn-outline,.btn.btn-outline,.btn-ghost,.btn-ghost-d,.btn-linkedin{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  font-family:var(--font-body); font-size:.875rem; font-weight:600; letter-spacing:.02em;
+  line-height:1; padding:12px 26px; border-radius:4px; border:1.5px solid transparent;
+  text-decoration:none; cursor:pointer; white-space:nowrap;
+  transition:background .3s ease, color .3s ease, border-color .3s ease, transform .3s var(--ease-out), box-shadow .3s ease;
+}
+/* primary (gold fill, white text) */
+.btn-cta,.btn-gold,.btn.btn-gold,.cta-btn,.btn-download{ background:var(--gold); color:var(--white)!important; border-color:var(--gold); }
+.btn-cta:hover,.btn-gold:hover,.btn.btn-gold:hover,.cta-btn:hover,.btn-download:hover{ background:var(--gold-muted); border-color:var(--gold-muted); color:var(--white)!important; transform:translateY(-2px); box-shadow:0 10px 30px rgba(196,154,42,.28); }
+/* secondary (navy fill, white text) */
+.btn-navy{ background:var(--navy); color:var(--white)!important; border-color:var(--navy); }
+.btn-navy:hover{ background:var(--navy-light); border-color:var(--navy-light); color:var(--white)!important; transform:translateY(-2px); box-shadow:0 10px 30px rgba(14,26,43,.22); }
+/* outline on light backgrounds */
+.btn-outline,.btn.btn-outline,.btn-ghost,.btn-linkedin{ background:transparent; color:var(--navy)!important; border-color:rgba(14,26,43,.24); }
+.btn-outline:hover,.btn.btn-outline:hover,.btn-ghost:hover,.btn-linkedin:hover{ border-color:var(--gold); color:var(--gold)!important; transform:translateY(-2px); }
+/* outline on dark backgrounds */
+.btn-ghost-d{ background:transparent; color:var(--white)!important; border-color:rgba(255,255,255,.32); }
+.btn-ghost-d:hover{ border-color:var(--gold-light); color:var(--gold-light)!important; transform:translateY(-2px); }
+/* large modifier */
+.btn-lg,.btn.btn-lg{ padding:15px 34px!important; font-size:.95rem!important; }
+.btn-download{ width:100%; }
+
+/* social / icon buttons */
+.footer-socials{ display:flex; gap:12px; }
+.social-btn{ width:40px; height:40px; padding:0; border-radius:8px; display:inline-flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:rgba(255,255,255,.8);
+  transition:background .25s, border-color .25s, color .25s, transform .25s; }
+.social-btn svg{ width:18px; height:18px; }
+.social-btn:hover{ background:var(--gold); border-color:var(--gold); color:var(--white); transform:translateY(-2px); }
+
+/* ---------- UNIFIED FOOTER ---------- */
+footer{ background:var(--navy); color:rgba(255,255,255,.72); padding:72px clamp(20px,5vw,64px) 32px; font-family:var(--font-body); }
+.footer-grid{ display:grid; grid-template-columns:1.6fr 1fr 1fr 1.2fr; gap:3rem; max-width:1240px; margin:0 auto; }
+.footer-brand .footer-logo{ display:inline-flex; align-items:center; }
+.footer-brand .footer-logo .logo-icon{ height:50px; width:auto; display:block; }
+.footer-brand .footer-logo .logo-name{ color:#fff!important; }
+.footer-brand .footer-logo .logo-tagline{ color:var(--gold-light); }
+.footer-brand>p{ margin:18px 0 22px; font-size:.92rem; line-height:1.7; max-width:34ch; color:rgba(255,255,255,.6); }
+.footer-col h4{ font-family:var(--font-body); font-size:.78rem; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-light); margin:0 0 18px; }
+.footer-col ul{ list-style:none; margin:0; padding:0; }
+.footer-col li{ margin-bottom:12px; }
+.footer-col a{ color:rgba(255,255,255,.68); text-decoration:none; font-size:.92rem; display:inline-flex; align-items:center; gap:6px; transition:color .25s, gap .25s; }
+.footer-col a:hover{ color:var(--gold-light); gap:10px; }
+.footer-col a .lk-arrow{ width:11px; height:11px; opacity:.6; }
+.footer-connect p{ font-size:.9rem; line-height:1.6; margin:0 0 18px; color:rgba(255,255,255,.6); }
+.footer-bottom{ display:flex; align-items:center; justify-content:space-between; gap:14px; max-width:1240px; margin:48px auto 0; padding-top:24px; border-top:1px solid rgba(255,255,255,.1); font-size:.84rem; color:rgba(255,255,255,.5); }
+.footer-bottom-links{ display:flex; gap:24px; }
+.footer-bottom-links a{ color:rgba(255,255,255,.6); text-decoration:none; transition:color .25s; }
+.footer-bottom-links a:hover{ color:var(--gold-light); }
+
+/* ---------- MOBILE ---------- */
+@media (max-width:980px){
+  .hamburger{ display:flex; }
+  .nav-drawer{
+    display:flex; flex-direction:column; align-items:flex-start; gap:0;
+    position:fixed; top:0; right:0; height:100vh; width:min(82vw,360px);
+    padding:104px 34px 40px; margin:0;
+    background:var(--navy); box-shadow:-24px 0 70px rgba(0,0,0,.35);
+    transform:translateX(105%); transition:transform .42s var(--ease-out); z-index:1001; overflow-y:auto;
+  }
+  #navbar.menu-open .nav-drawer{ transform:translateX(0); }
+  .nav-links{ flex-direction:column; align-items:stretch; gap:0; margin:0; width:100%; }
+  .nav-links li{ width:100%; border-bottom:1px solid rgba(255,255,255,.09); }
+  .nav-links a{ display:block; width:100%; padding:17px 2px; font-size:1.05rem; color:rgba(255,255,255,.85); }
+  .nav-links a::after{ display:none; }
+  .nav-links a:hover, .nav-links a.active{ color:var(--gold-light); }
+  .nav-cta{ margin-top:26px; width:100%; }
+  body.nav-locked{ overflow:hidden; }
+  #navbar.menu-open::before{ content:""; position:fixed; inset:0; background:rgba(14,26,43,.55); z-index:1000; -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px); }
+  .footer-grid{ grid-template-columns:1fr 1fr; gap:2.2rem; }
+  .footer-bottom{ flex-direction:column; gap:12px; text-align:center; }
+}
+@media (max-width:560px){
+  .footer-grid{ grid-template-columns:1fr; gap:2rem; }
+  #navbar .nav-logo .logo-icon{ height:44px; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+<div class="cur" id="cur"></div>
+<div class="cur-r" id="curR"></div>
+
+<nav id="navbar">
+  <a class="nav-logo" href="index.html" aria-label="Flortran home">
+    <img class="logo-icon" src="flortran-logo-header.png" alt="Flortran — Finance. Advice. Transcend." />
+    
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-drawer" id="nav-drawer">
+    <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html" class="active">Services</a></li>
+        <li><a href="case-study.html">Case Studies</a></li>
+        <li><a href="credentials.html">Credentials</a></li>
+        <li><a href="free-resource.html">Free Resource</a></li>
+    </ul>
+    <a class="btn-cta nav-cta" href="book-consultation.html#book">Book Consultation</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-left">
+      <div class="eyebrow">Financial Modeling</div>
+      <h1 class="hero-h1">Dynamic financial models that turn assumptions into decisions.</h1>
+      <p class="hero-sub">We build integrated 3-statement models, scenario planning tools, and forecasting systems that give you clarity, support better decisions, and deliver investor-ready outputs.</p>
+      <div class="hero-btns">
+        <a href="book-consultation.html#book" class="btn-cta">Book a Consultation <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="book-consultation.html#book" class="btn-outline">Discuss Your Model <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 01-9 8.4 8.6 8.6 0 01-3.8-.9L3 20l1-4.9A8.4 8.4 0 1121 11.5z"/></svg></a>
+      </div>
+      <div class="tagline-rule">Finance.&nbsp;&nbsp;Advice.&nbsp;&nbsp;Transcend.</div>
+    </div>
+
+    <!-- MODEL OVERVIEW CARD -->
+    <div class="model-card" aria-label="Illustrative model overview">
+      <div class="mc-head">
+        <div class="mc-title">Model Overview</div>
+        <div class="mc-scenarios" role="group" aria-label="Scenario selector">
+          <span class="mc-scen-label">Scenario</span>
+          <button class="scen-btn on" data-scen="base" type="button">Base Case</button>
+          <button class="scen-btn" data-scen="up" type="button">Upside</button>
+          <button class="scen-btn" data-scen="down" type="button">Downside</button>
+        </div>
+      </div>
+      <div class="mc-metrics">
+        <div class="metric"><div class="m-lab">Revenue (FY26E)</div><div class="m-val" id="mv-rev">$128.7M</div><div class="m-delta"><b id="md-rev">+18.6%</b> vs. FY25E</div></div>
+        <div class="metric"><div class="m-lab">EBITDA (FY26E)</div><div class="m-val" id="mv-ebd">$22.6M</div><div class="m-delta"><b id="md-ebd">+22.6%</b> vs. FY25E</div></div>
+        <div class="metric"><div class="m-lab">Free Cash Flow (FY26E)</div><div class="m-val" id="mv-fcf">$14.3M</div><div class="m-delta"><b id="md-fcf">+26.0%</b> vs. FY25E</div></div>
+        <div class="metric"><div class="m-lab">Cash Balance (FY26E)</div><div class="m-val" id="mv-cash">$18.7M</div><div class="m-delta"><b id="md-cash">+24.5%</b> vs. FY25E</div></div>
+      </div>
+      <div class="mc-body">
+        <div class="mc-assump">
+          <div class="mc-sec-lab">Key Assumptions</div>
+          <div class="arow"><span class="a-name">Revenue Growth</span><span class="a-val" id="as-growth">18.0%</span></div>
+          <div class="arow"><span class="a-name">COGS % of Revenue</span><span class="a-val">41.0%</span></div>
+          <div class="arow"><span class="a-name">Operating Expenses %</span><span class="a-val">29.0%</span></div>
+          <div class="arow"><span class="a-name">Tax Rate</span><span class="a-val">22.0%</span></div>
+          <div class="arow"><span class="a-name">Capex (FY26E)</span><span class="a-val">$6.4M</span></div>
+          <a class="a-link" href="book-consultation.html#book">View all assumptions <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <div class="mc-chart">
+          <div class="chart-head">
+            <div class="mc-sec-lab" style="margin:0">Forecast Summary (USD M)</div>
+            <div class="legend">
+              <span class="lg"><span class="sw rev"></span>Revenue</span>
+              <span class="lg"><span class="sw ebd"></span>EBITDA</span>
+              <span class="lg"><span class="sw fcf"></span>Free Cash Flow</span>
+            </div>
+          </div>
+          <div class="chart" id="chart">
+            <div class="gridlines">
+              <div class="gl" style="top:0"></div><div class="gl" style="top:25%"></div><div class="gl" style="top:50%"></div><div class="gl" style="top:75%"></div><div class="gl" style="bottom:0"></div>
+            </div>
+            <span class="ylab" style="top:0">200M</span>
+            <span class="ylab" style="top:25%">150M</span>
+            <span class="ylab" style="top:50%">100M</span>
+            <span class="ylab" style="top:75%">50M</span>
+            <span class="ylab" style="top:100%">0</span>
+            <div class="bars">
+              <div class="bgroup"><div class="bar rev" style="height:46%;transition-delay:.05s"></div><div class="bar ebd" style="height:15%;transition-delay:.1s"></div></div>
+              <div class="bgroup"><div class="bar rev" style="height:54%;transition-delay:.15s"></div><div class="bar ebd" style="height:19%;transition-delay:.2s"></div></div>
+              <div class="bgroup"><div class="bar rev" style="height:64%;transition-delay:.25s"></div><div class="bar ebd" style="height:23%;transition-delay:.3s"></div></div>
+              <div class="bgroup"><div class="bar rev" style="height:74%;transition-delay:.35s"></div><div class="bar ebd" style="height:27%;transition-delay:.4s"></div></div>
+              <div class="bgroup"><div class="bar rev" style="height:84%;transition-delay:.45s"></div><div class="bar ebd" style="height:31%;transition-delay:.5s"></div></div>
+              <div class="bgroup"><div class="bar rev" style="height:96%;transition-delay:.55s"></div><div class="bar ebd" style="height:36%;transition-delay:.6s"></div></div>
+            </div>
+            <svg class="fcf-line" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <path d="M8.3 93 L25 89 L41.6 84 L58.3 78 L75 71 L91.6 62" vector-effect="non-scaling-stroke"/><circle cx="8.3" cy="93" r="1.6" vector-effect="non-scaling-stroke"/><circle cx="25" cy="89" r="1.6" vector-effect="non-scaling-stroke"/><circle cx="41.6" cy="84" r="1.6" vector-effect="non-scaling-stroke"/><circle cx="58.3" cy="78" r="1.6" vector-effect="non-scaling-stroke"/><circle cx="75" cy="71" r="1.6" vector-effect="non-scaling-stroke"/><circle cx="91.6" cy="62" r="1.6" vector-effect="non-scaling-stroke"/>
+            </svg>
+            <div class="xlabs"><span>FY24E</span><span>FY25E</span><span>FY26E</span><span>FY27E</span><span>FY28E</span><span>FY29E</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURE STRIP ============ -->
+<section style="padding-top:8px">
+  <div class="wrap">
+    <div class="feat-grid">
+      <div class="feat reveal">
+        <div class="ic-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2.2"/><circle cx="5" cy="18" r="2.2"/><circle cx="19" cy="18" r="2.2"/><path d="M12 7.2V12M12 12l-5.4 4.2M12 12l5.4 4.2"/></svg></div>
+        <div><h3>3-Statement Integration</h3><p>Fully linked Income Statement, Balance Sheet, and Cash Flow that stay in sync.</p></div>
+      </div>
+      <div class="feat reveal rd1">
+        <div class="ic-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="10" r="2"/><circle cx="9" cy="18" r="2"/><path d="M7.8 7.2l8.4 2M16.4 11.4l-5.9 5.2"/></svg></div>
+        <div><h3>Scenario Planning</h3><p>Stress-test assumptions, compare outcomes, and prepare for any scenario.</p></div>
+      </div>
+      <div class="feat reveal rd2">
+        <div class="ic-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8.5 8.5h.01M12 8.5h.01M15.5 8.5h.01M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 15.5h.01M12 15.5h.01M15.5 15.5h.01"/></svg></div>
+        <div><h3>Assumption Logic</h3><p>Dynamic, transparent assumptions with built-in checks and controls.</p></div>
+      </div>
+      <div class="feat reveal rd3">
+        <div class="ic-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M7 13l3-3 2.5 2 4-4.5"/></svg></div>
+        <div><h3>Decision-Ready Dashboards</h3><p>Clear visuals and KPIs that highlight performance and drive better decisions.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHAT'S INCLUDED ============ -->
+<section>
+  <div class="wrap">
+    <h2 class="sec-title">What&rsquo;s included in the model</h2>
+    <div class="incl-panel reveal">
+      <div class="incl-col">
+        <div class="incl-item"><span class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 20v-5M9 20v-9M14 20v-6M19 20V7"/></svg></span><span class="incl-num">1</span><span class="incl-name">Revenue Build</span></div>
+        <div class="incl-item"><span class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span><span class="incl-num">2</span><span class="incl-name">Operating Expenses</span></div>
+        <div class="incl-item"><span class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c.6-3.2 2.9-5 5.5-5s4.9 1.8 5.5 5"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.6c2.8-.4 4.7 1.3 5 4.4"/></svg></span><span class="incl-num">3</span><span class="incl-name">Headcount</span></div>
+      </div>
+      <div class="incl-col">
+        <div class="incl-item"><span class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 6.5l3 3L21 6a4.2 4.2 0 01-5.6 5.6L8 19a2.1 2.1 0 01-3-3l7.4-7.4A4.2 4.2 0 0118 3l-3.5 3.5z"/></svg></span><span class="incl-num">4</span><span class="incl-name">Capex</span></div>
+        <div class="incl-item"><span class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 11-2.3-5.6"/><path d="M20 4v4h-4"/></svg></span><span class="incl-num">5</span><span class="incl-name">Working Capital</span></div>
+        <div class="incl-item"><span class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M5 21V10M9 21V10M15 21V10M19 21V10M3 10l9-6 9 6z"/></svg></span><span class="incl-num">6</span><span class="incl-name">Debt Schedule</span></div>
+      </div>
+      <div class="incl-col">
+        <div class="incl-item"><span class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4.5l2.6 1.6"/><path d="M12 5.5v1M18.5 12h-1M12 18.5v-1M5.5 12h1" opacity=".6"/></svg></span><span class="incl-num">7</span><span class="incl-name">Cash Flow Statement</span></div>
+        <div class="incl-item"><span class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7.5h6M9 11h6M9 14.5h4"/></svg></span><span class="incl-num">8</span><span class="incl-name">Balance Sheet</span></div>
+        <div class="incl-item"><span class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M10 10v10"/></svg></span><span class="incl-num">9</span><span class="incl-name">Dashboard</span></div>
+      </div>
+      <div class="incl-col" style="border-right:none;display:flex;flex-direction:column;gap:14px;padding-right:0">
+        <div class="incl-item" style="border-bottom:none;padding-bottom:0"><span class="incl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5.2-5.2 3.6 3.6L20 7"/><path d="M20 11V7h-4"/></svg></span><span class="incl-num">10</span><span class="incl-name">Sensitivity Table</span></div>
+        <div class="timeline-tile">
+          <div class="tl-lab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10.5h17"/></svg>Typical Timeline</div>
+          <div class="tl-val">3&ndash;5 Weeks</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MODEL TYPES ============ -->
+<section>
+  <div class="wrap">
+    <h2 class="sec-title">Model types</h2>
+    <div class="types-grid">
+      <div class="type-card reveal">
+        <div class="ic-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1.1" fill="currentColor"/><path d="M12 12l6-6M18 6l1.6-.4L20 4l-1.6.4L18 6z"/></svg></div>
+        <div>
+          <h3>Fundraising Model</h3>
+          <p>Investor-ready models with scenarios, valuation support, and clear use of proceeds.</p>
+          <a class="learn" href="book-consultation.html#book">Learn more <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+      <div class="type-card reveal rd1">
+        <div class="ic-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M9 3.5V6h6V3.5"/><path d="M9 11h2.5M9 15h2.5M14.5 10l2 2-2 2M14.8 15.6h2"/></svg></div>
+        <div>
+          <h3>Operating Model</h3>
+          <p>Forecast performance, track KPIs, and make confident decisions with a driver-based model.</p>
+          <a class="learn" href="book-consultation.html#book">Learn more <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+      <div class="type-card reveal rd2">
+        <div class="ic-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="11" y="10" width="9" height="11" rx="1.5"/><path d="M14 13.5h3M14 16.5h3"/><path d="M4 14V5a1 1 0 011-1h9"/><path d="M8 8l3-3-3-3" transform="translate(3 3)"/><path d="M4 14l3 3M4 14l-1.8 1.8"/></svg></div>
+        <div>
+          <h3>Project or Expansion Model</h3>
+          <p>Evaluate new initiatives, capex projects, or market expansions with robust financial analysis.</p>
+          <a class="learn" href="book-consultation.html#book">Learn more <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BEST SUITED FOR ============ -->
+<section>
+  <div class="wrap">
+    <h2 class="sec-title">Best suited for</h2>
+    <div class="suited-grid reveal">
+      <div class="su-item">
+        <div class="ic-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15c-1.5-1-3-3.7-3-6.5C9 5 10.4 2.8 12 2c1.6.8 3 3 3 6.5 0 2.8-1.5 5.5-3 6.5z"/><circle cx="12" cy="8.5" r="1.3"/><path d="M9 12.5l-2.6 2c-.4.3-.5.8-.3 1.2l1.2 2.3M15 12.5l2.6 2c.4.3.5.8.3 1.2l-1.2 2.3M10.5 17.5c-.4 1.4-.4 2.7 0 4M13.5 17.5c.4 1.4.4 2.7 0 4" opacity=".85"/></svg></div>
+        <div>
+          <h3>Startups preparing for fundraising</h3>
+          <p>Build credibility with investors using clear forecasts and scenarios.</p>
+        </div>
+      </div>
+      <div class="su-item">
+        <div class="ic-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M6 19v-4M10 19v-7M14 19v-5M18 19V9" opacity=".9"/><path d="M5 8l4-3 3.5 2.5L18 3"/><path d="M18 6.5V3h-3.5"/></svg></div>
+        <div>
+          <h3>Growing businesses planning expansion</h3>
+          <p>Model growth, evaluate opportunities, and allocate capital wisely.</p>
+        </div>
+      </div>
+      <div class="su-item">
+        <div class="ic-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.2" r="3.6"/><path d="M5 20c.8-4 3.6-6 7-6s6.2 2 7 6"/></svg></div>
+        <div>
+          <h3>Operators improving internal planning</h3>
+          <p>Enhance budgeting, forecasting, and performance tracking.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OUR PROCESS ============ -->
+<section>
+  <div class="wrap">
+    <h2 class="sec-title">Our process</h2>
+    <div class="proc-grid">
+      <div class="step reveal"><div class="step-num">1</div><h3>Align Assumptions</h3><p>We align on your goals, business drivers, and key assumptions.</p></div>
+      <div class="proc-arrow" aria-hidden="true"><svg viewBox="0 0 34 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 6h30M27 2l4 4-4 4"/></svg></div>
+      <div class="step reveal rd1"><div class="step-num">2</div><h3>Build the Engine</h3><p>We construct a robust, flexible model with built-in logic and integrity.</p></div>
+      <div class="proc-arrow" aria-hidden="true"><svg viewBox="0 0 34 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 6h30M27 2l4 4-4 4"/></svg></div>
+      <div class="step reveal rd2"><div class="step-num">3</div><h3>Test Scenarios</h3><p>We stress-test scenarios, validate outputs, and refine key insights.</p></div>
+      <div class="proc-arrow" aria-hidden="true"><svg viewBox="0 0 34 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M1 6h30M27 2l4 4-4 4"/></svg></div>
+      <div class="step reveal rd3"><div class="step-num">4</div><h3>Deliver Insights</h3><p>You receive a decision-ready model with dashboards and clear takeaways.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA BAND ============ -->
+<section style="padding-bottom:74px">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <div class="cta-logo" aria-hidden="true">
+        <svg viewBox="0 0 52 52" fill="none"><rect x="6" y="28" width="8" height="18" rx="1.5" fill="#C49A2A"/><rect x="18" y="18" width="8" height="28" rx="1.5" fill="#E8C55A"/><rect x="30" y="8" width="8" height="38" rx="1.5" fill="#FFFFFF" opacity=".92"/><path d="M40 8l6-2-2 6z" fill="#C49A2A"/></svg>
+      </div>
+      <div class="cta-copy">
+        <h2>Need a model investors can trust?</h2>
+        <p>Let&rsquo;s build a model that brings clarity, confidence, and capital.</p>
+      </div>
+      <a href="book-consultation.html#book" class="btn-cta">Book a Consultation <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo footer-logo" href="index.html" aria-label="Flortran home">
+        <img class="logo-icon" src="flortran-logo-footer.png" alt="Flortran" />
+        
+      </a>
+      <p>We partner with founders and businesses to create clarity, build investor confidence, and transcend limitations—through numbers that tell a compelling story.</p>
+      <div class="footer-socials">
+        <a class="social-btn" aria-label="LinkedIn" href="https://www.linkedin.com" rel="noopener" target="_blank"><svg fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0zM.5 8h4V24h-4V8zM8 8h3.8v2.2h.05c.53-1 1.83-2.2 3.77-2.2 4.03 0 4.78 2.65 4.78 6.1V24h-4v-7c0-1.67-.03-3.8-2.32-3.8-2.32 0-2.68 1.8-2.68 3.68V24H8V8z"></path></svg></a>
+        <a class="social-btn" aria-label="Email" href="mailto:hello@flortran.com"><svg fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><path d="M22 6l-10 7L2 6"></path></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="services.html#business-valuation">Business Valuation <svg class="lk-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4"></path></svg></a></li>
+        <li><a href="services.html#financial-modeling">Financial Modeling <svg class="lk-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4"></path></svg></a></li>
+        <li><a href="services.html#investment-readiness-review">Investment Readiness Review <svg class="lk-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4"></path></svg></a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="case-study.html">Case Studies</a></li>
+        <li><a href="credentials.html">Credentials</a></li>
+        <li><a href="free-resource.html">Free Resource</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-connect">
+      <h4>Let's Connect</h4>
+      <p>Have a project in mind? Let's build your investment story.</p>
+      <a class="btn-cta" href="book-consultation.html#book">Book a Consultation <svg class="lk-arrow" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4"></path></svg></a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Flortran Advisory &amp; Consulting. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-of-use.html">Terms of Use</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.documentElement.classList.add('js-ready');
+
+/* Custom cursor (desktop only) */
+if (window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+  const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  if(cur&&curR){
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+    (function anim(){
+      cur.style.left=mx+'px';cur.style.top=my+'px';
+      rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+      curR.style.left=rx+'px';curR.style.top=ry+'px';
+      requestAnimationFrame(anim);
+    })();
+  }
+}
+
+/* Progress bar + nav scroll state */
+window.addEventListener('scroll',()=>{
+  const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  const pb=document.getElementById('prog'); if(pb) pb.style.width=pct+'%';
+  const nv=document.getElementById('navbar'); if(nv) nv.classList.toggle('scrolled',window.scrollY>30);
+},{passive:true});
+
+/* Scroll reveals */
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* Chart draw-in */
+const chart=document.getElementById('chart');
+if(chart){
+  const cobs=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){chart.classList.add('drawn');cobs.disconnect();}});
+  },{threshold:.3});
+  cobs.observe(chart);
+}
+
+/* Scenario toggle — switches the illustrative metrics */
+const SCEN={
+  base:{rev:'$128.7M',ebd:'$22.6M',fcf:'$14.3M',cash:'$18.7M',drev:'+18.6%',debd:'+22.6%',dfcf:'+26.0%',dcash:'+24.5%',growth:'18.0%'},
+  up:  {rev:'$141.2M',ebd:'$26.4M',fcf:'$17.1M',cash:'$21.9M',drev:'+30.1%',debd:'+43.2%',dfcf:'+50.7%',dcash:'+45.8%',growth:'24.5%'},
+  down:{rev:'$114.9M',ebd:'$17.8M',fcf:'$10.6M',cash:'$15.2M',drev:'+5.9%', debd:'-3.4%', dfcf:'-6.6%', dcash:'+1.2%', growth:'11.0%'}
+};
+document.querySelectorAll('.scen-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.scen-btn').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    const d=SCEN[btn.dataset.scen];
+    const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    set('mv-rev',d.rev);set('mv-ebd',d.ebd);set('mv-fcf',d.fcf);set('mv-cash',d.cash);
+    set('md-rev',d.drev);set('md-ebd',d.debd);set('md-fcf',d.dfcf);set('md-cash',d.dcash);
+    set('as-growth',d.growth);
+    ['md-rev','md-ebd','md-fcf','md-cash'].forEach((id,i)=>{
+      const el=document.getElementById(id);
+      const vals=[d.drev,d.debd,d.dfcf,d.dcash];
+      if(el)el.style.color=vals[i].startsWith('-')?'#B04A3A':'';
+    });
+  });
+});
+</script>
+<script id="flortran-nav-js">
+(function(){
+  var nav=document.getElementById('navbar');
+  var burger=document.getElementById('hamburger');
+  var drawer=document.getElementById('nav-drawer');
+  if(burger&&nav){
+    burger.addEventListener('click',function(e){
+      e.stopPropagation();
+      var open=nav.classList.toggle('menu-open');
+      document.body.classList.toggle('nav-locked',open);
+      burger.setAttribute('aria-expanded',open?'true':'false');
+      burger.setAttribute('aria-label',open?'Close menu':'Open menu');
+    });
+    if(drawer){
+      drawer.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click',function(){
+          nav.classList.remove('menu-open');
+          document.body.classList.remove('nav-locked');
+          burger.setAttribute('aria-expanded','false');
+          burger.setAttribute('aria-label','Open menu');
+        });
+      });
+    }
+    document.addEventListener('keydown',function(ev){
+      if(ev.key==='Escape'&&nav.classList.contains('menu-open')){
+        nav.classList.remove('menu-open'); document.body.classList.remove('nav-locked');
+        burger.setAttribute('aria-expanded','false'); burger.setAttribute('aria-label','Open menu');
+      }
+    });
+  }
+  function onScroll(){ if(nav) nav.classList.toggle('scrolled', window.scrollY>30); }
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+})();
+</script>
+</body>
+</html>
