@@ -63,7 +63,7 @@
     .eyebrow::after{content:'';width:40px;height:1px;background:var(--gold)}
     .hero-h1{font-family:var(--font-display);font-size:clamp(2.5rem,4.8vw,4rem);font-weight:600;line-height:1.06;color:var(--navy);margin-bottom:22px}
     .hero-sub{font-size:1rem;line-height:1.75;color:var(--text-mid);max-width:440px;font-weight:300;margin-bottom:30px}
-    .hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:30px}
+    .hero-btns{display:flex;gap:14px;flex-wrap:nowrap;align-items:center;margin-bottom:30px}
     .hero-pills{display:flex;gap:28px;flex-wrap:wrap}
     .hero-pill{display:flex;align-items:center;gap:9px;font-size:.84rem;color:var(--text-mid);font-weight:500}
     .hero-pill .dot{width:18px;height:18px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -75,6 +75,9 @@
     .sc-top{display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;padding-bottom:24px;border-bottom:1px solid var(--border-soft)}
     .gauge{position:relative;width:150px;height:150px;flex-shrink:0}
     .gauge svg{transform:rotate(-90deg)}
+    .gauge-arc{stroke-dashoffset:402;transition:stroke-dashoffset 1.5s var(--ease) .25s}
+    .scorecard.visible .gauge-arc{stroke-dashoffset:113}
+    @media (prefers-reduced-motion:reduce){.gauge-arc{transition:none;stroke-dashoffset:113}}
     .gauge-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
     .gauge-score{font-family:var(--font-display);font-size:2.8rem;font-weight:600;color:var(--navy);line-height:1}
     .gauge-of{font-size:.66rem;color:var(--text-light);letter-spacing:.1em}
@@ -231,7 +234,10 @@
       .foot-grid{grid-template-columns:1fr}
       .foot-bottom{flex-direction:column;gap:12px}
     }
-  
+    @media(max-width:560px){
+      .hero-btns{flex-wrap:wrap}
+      .hero-btns .btn{width:100%;justify-content:center}
+    }
     /* Hide custom cursor on touch devices */
     @media (hover:none),(pointer:coarse){
       .cur,.cur-r{display:none!important}
@@ -419,11 +425,11 @@ footer{ background:var(--navy); color:rgba(255,255,255,.72); padding:72px clamp(
         <div class="gauge">
           <svg width="150" height="150" viewBox="0 0 150 150">
             <circle cx="75" cy="75" r="64" fill="none" stroke="rgba(14,26,43,.07)" stroke-width="11"/>
-            <circle cx="75" cy="75" r="64" fill="none" stroke="url(#gg)" stroke-width="11" stroke-linecap="round" stroke-dasharray="402" stroke-dashoffset="113"/>
+            <circle class="gauge-arc" cx="75" cy="75" r="64" fill="none" stroke="url(#gg)" stroke-width="11" stroke-linecap="round" stroke-dasharray="402"/>
             <defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8C55A"/><stop offset="1" stop-color="#C49A2A"/></linearGradient></defs>
           </svg>
           <div class="gauge-center">
-            <div class="gauge-score">72</div>
+            <div class="gauge-score" data-score="72">0</div>
             <div class="gauge-of">/100</div>
           </div>
         </div>
@@ -725,6 +731,33 @@ const obs=new IntersectionObserver(es=>{
   es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
 },{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// GAUGE SCORE COUNT-UP
+(function(){
+  var el=document.querySelector('.gauge-score[data-score]');
+  if(!el) return;
+  var target=parseInt(el.getAttribute('data-score'),10)||0;
+  var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var run=function(){
+    if(reduce){el.textContent=target;return;}
+    var start=null,dur=1500;
+    var tick=function(ts){
+      if(start===null) start=ts;
+      var p=Math.min((ts-start)/dur,1);
+      var eased=1-Math.pow(1-p,3);
+      el.textContent=Math.round(eased*target);
+      if(p<1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+  var card=document.querySelector('.scorecard');
+  if('IntersectionObserver' in window && card){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){run();io.disconnect();}});
+    },{threshold:.3});
+    io.observe(card);
+  } else { run(); }
+})();
 </script>
 <script id="flortran-nav-js">
 (function(){

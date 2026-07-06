@@ -59,7 +59,7 @@
     .eyebrow::after{content:'';width:40px;height:1px;background:var(--gold)}
     .hero-h1{font-family:var(--font-display);font-size:clamp(2.5rem,4.8vw,4rem);font-weight:600;line-height:1.06;color:var(--navy);margin-bottom:22px}
     .hero-sub{font-size:1rem;line-height:1.75;color:var(--text-mid);max-width:460px;font-weight:300;margin-bottom:30px}
-    .hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+    .hero-btns{display:flex;gap:14px;flex-wrap:nowrap;align-items:center}
 
     /* VALUATION CARD */
     .valcard{background:var(--white);border:1px solid var(--border-soft);border-radius:16px;box-shadow:0 8px 48px rgba(14,26,43,.07);padding:30px 32px}
@@ -80,8 +80,8 @@
     .vc-sec-label{font-size:.62rem;letter-spacing:.14em;font-weight:600;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
     .driver{display:grid;grid-template-columns:90px 1fr 32px;gap:10px;align-items:center;margin-bottom:11px;font-size:.74rem}
     .driver .dn{color:var(--text-mid)}
-    .driver .db{height:5px;background:var(--border-soft);border-radius:3px;overflow:hidden}
-    .driver .df{height:100%;background:linear-gradient(90deg,var(--gold-light),var(--gold));border-radius:3px}
+    .driver .db{display:block;height:6px;background:var(--border-soft);border-radius:3px;overflow:hidden}
+    .driver .df{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold-light),var(--gold));border-radius:3px;transition:width 1.1s var(--ease) .5s}
     .driver .dp{text-align:right;color:var(--navy);font-weight:600}
     .meth-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .meth{display:flex;align-items:center;gap:9px;padding:11px 13px;border:1px solid var(--border-soft);border-radius:8px;font-size:.76rem;color:var(--navy);font-weight:500;transition:border-color .2s,background .2s}
@@ -233,6 +233,7 @@
     }
     @media(max-width:560px){
       .incl-grid{grid-template-columns:1fr}
+      .hero-btns{flex-wrap:wrap}
       .hero-btns .btn{width:100%;justify-content:center}
     }
     /* Hide custom cursor on touch devices */
@@ -430,10 +431,10 @@ footer{ background:var(--navy); color:rgba(255,255,255,.72); padding:72px clamp(
     <div class="vc-body">
       <div>
         <div class="vc-sec-label">Key Drivers</div>
-        <div class="driver"><span class="dn">Revenue Growth</span><span class="db"><span class="df" style="width:78%"></span></span><span class="dp">42%</span></div>
-        <div class="driver"><span class="dn">EBITDA Margin</span><span class="db"><span class="df" style="width:62%"></span></span><span class="dp">28%</span></div>
-        <div class="driver"><span class="dn">WACC</span><span class="db"><span class="df" style="width:40%"></span></span><span class="dp">17%</span></div>
-        <div class="driver"><span class="dn">Terminal Multiple</span><span class="db"><span class="df" style="width:30%"></span></span><span class="dp">13%</span></div>
+        <div class="driver"><span class="dn">Revenue Growth</span><span class="db"><span class="df" data-w="42"></span></span><span class="dp">42%</span></div>
+        <div class="driver"><span class="dn">EBITDA Margin</span><span class="db"><span class="df" data-w="28"></span></span><span class="dp">28%</span></div>
+        <div class="driver"><span class="dn">WACC</span><span class="db"><span class="df" data-w="17"></span></span><span class="dp">17%</span></div>
+        <div class="driver"><span class="dn">Terminal Multiple</span><span class="db"><span class="df" data-w="13"></span></span><span class="dp">13%</span></div>
       </div>
       <div>
         <div class="vc-sec-label">Methodologies Used</div>
@@ -647,6 +648,22 @@ const obs=new IntersectionObserver(es=>{
   es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
 },{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* Animate Key Driver bars to their target width */
+(function(){
+  var bars=document.querySelectorAll('.driver .df[data-w]');
+  if(!bars.length) return;
+  var fill=function(){bars.forEach(function(b){b.style.width=b.getAttribute('data-w')+'%';});};
+  var card=document.querySelector('.valcard');
+  if('IntersectionObserver' in window && card){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){fill();io.disconnect();}});
+    },{threshold:.25});
+    io.observe(card);
+  }
+  // Fallback in case the card is already on-screen at load
+  window.addEventListener('load',function(){setTimeout(fill,700);});
+})();
 </script>
 <script id="flortran-nav-js">
 (function(){

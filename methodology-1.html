@@ -31,7 +31,7 @@
       --max: 1160px;
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
 
     body {
       min-height: 100vh;
@@ -878,6 +878,7 @@
       .framework-intro { position: static; max-width: 620px; }
       .framework-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .metrics-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .metrics-row.telecom-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .metric { border-bottom: 1px solid rgba(6,31,79,.08); }
       .metric:nth-child(2n) { border-right: 0; }
       .metric:last-child { grid-column: span 2; }
@@ -935,6 +936,7 @@
       .approach-track,
       .framework-grid,
       .metrics-row { grid-template-columns: 1fr; }
+      .metrics-row.telecom-metrics { grid-template-columns: 1fr; }
       .metric, .metric:nth-child(2n), .metric:last-child { border-right: 0; grid-column: auto; }
       .framework-card { min-height: auto; }
       .cta-panel { padding: 26px 22px; }
