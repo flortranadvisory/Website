@@ -1,0 +1,17 @@
+==== HOW TO PASTE INTO SYSTEME.IO RAW HTML ====
+
+1. In Systeme.io page editor, drag a "Raw HTML" element onto canvas
+2. Double-click it → Edit code → paste the CONTENT BELOW (from <style id="flortran-systeme-styles"> to the <script> tag)
+3. OR open flortran-systeme-landing.html in a text editor, copy lines 20-650 and paste
+
+If your Systeme.io plan strips <style> tags inside Raw HTML:
+→ Go to Funnel Step → Settings → Tracking codes
+→ Paste the <style>...</style> block into "Header code"
+→ Paste the <header> ... </footer> + <script> block into "Footer code" OR Raw HTML
+
+LEAD CAPTURE:
+→ Replace the <form class="fallback-form"> section with your Systeme.io script:
+   <script id="form-script-tag-XXXX" src="https://flortranadvisory.systeme.io/public/remote/page/YOUR_ID.js"></script>
+→ Delete fallback-form once your script is live
+
+Need the full snippet? Just open flortran-systeme-landing.html and copy all.
