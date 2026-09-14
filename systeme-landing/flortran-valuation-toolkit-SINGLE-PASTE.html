@@ -248,14 +248,8 @@
     .section{padding:40px 14px}
     .proof-bar{justify-content:center; text-align:center}
   }
-
-/* Systeme injected form — match Flortran fallback */
 #systeme-form-wrap form{margin:0}
 #systeme-form-wrap label{display:block; font-size:.82rem; font-weight:700; color:var(--navy); margin-bottom:7px}
-#systeme-form-wrap input[type="text"],#systeme-form-wrap input[type="email"]{width:100%; padding:13px 14px; border-radius:8px; border:1.5px solid rgba(14,26,43,.14); background:var(--cream); font-family:var(--font-body); font-size:.95rem; color:var(--navy); outline:none; margin-bottom:14px}
-#systeme-form-wrap input:focus{border-color:var(--gold); background:#fff; box-shadow:0 0 0 3px rgba(196,154,42,.12)}
-#systeme-form-wrap button,#systeme-form-wrap [type="submit"]{width:100%; display:inline-flex; align-items:center; justify-content:center; gap:10px; background:var(--gold); color:#fff; border:1.5px solid var(--gold); padding:15px 22px; border-radius:8px; font-family:var(--font-body); font-size:.95rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; box-shadow:var(--shadow-gold); margin-top:6px}
-#systeme-form-wrap button:hover{ background:var(--gold-muted); border-color:var(--gold-muted); transform:translateY(-1px); }
 
 </style>
 
@@ -355,9 +349,10 @@
           <div style="width:48px;height:48px;border-radius:50%;background:#fff;border:1px solid rgba(26,170,114,.18); display:flex; align-items:center; justify-content:center; margin:0 auto 10px; color:#1aaa72">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 10-10"/><circle cx="12" cy="12" r="10" stroke-opacity=".15"/></svg>
           </div>
-          <strong>You're in — check your email!</strong>
-          <p>Your toolkit is on its way from <strong>hello@flortran.com</strong>. If you don't see it in 2 minutes, check Promotions / Spam.</p>
-          <a href="https://www.flortran.com/book-consultation.html" target="_blank" rel="noopener" style="display:inline-flex; margin-top:14px; font-size:.84rem; font-weight:700; color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(196,154,42,.28)">Want a 1:1 review? Book a 30-min call →</a>
+          <strong>You're in — toolkit ready!</strong>
+          <p>Your Business Valuation Toolkit is ready. Access it directly below or check your email from <strong>hello@flortran.com</strong> (check Promotions/Spam).</p>
+          <a href="https://drive.google.com/drive/folders/1V5v_8LBqdjhBmTubieIe_6GhZYTRA5Xg?usp=drive_link" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; justify-content:center; gap:8px; margin-top:14px; width:100%; background:var(--navy); color:#fff; text-decoration:none; padding:14px 20px; border-radius:8px; font-weight:800; font-size:.9rem; letter-spacing:.02em">ACCESS YOUR TOOLKIT IN GOOGLE DRIVE →</a>
+          <a href="https://www.flortran.com/book-consultation.html" target="_blank" rel="noopener" style="display:inline-flex; margin-top:12px; font-size:.84rem; font-weight:700; color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(196,154,42,.28)">Want a 1:1 review? Book a 30-min call →</a>
         </div>
 
         <!-- EXAMPLE of Systeme.io embed (leave commented until you have your ID):
@@ -505,6 +500,8 @@
       form.style.display='none';
       toast.style.display='block';
       toast.scrollIntoView({behavior:'smooth', block:'center'});
+      // Optional: auto-open Drive folder after 1s
+      // setTimeout(()=> window.open('https://drive.google.com/drive/folders/1V5v_8LBqdjhBmTubieIe_6GhZYTRA5Xg?usp=drive_link', '_blank'), 800);
       // Optional: store lead locally for preview
       try{ localStorage.setItem('flortran_toolkit_lead', JSON.stringify({fname,email,at:new Date().toISOString()})); }catch(_){}
       // If you host standalone and want to redirect to thankyou page:

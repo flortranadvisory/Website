@@ -23,6 +23,8 @@
       form.style.display='none';
       toast.style.display='block';
       toast.scrollIntoView({behavior:'smooth', block:'center'});
+      // Optional: auto-open Drive folder after 1s
+      // setTimeout(()=> window.open('https://drive.google.com/drive/folders/1V5v_8LBqdjhBmTubieIe_6GhZYTRA5Xg?usp=drive_link', '_blank'), 800);
       // Optional: store lead locally for preview
       try{ localStorage.setItem('flortran_toolkit_lead', JSON.stringify({fname,email,at:new Date().toISOString()})); }catch(_){}
       // If you host standalone and want to redirect to thankyou page:
