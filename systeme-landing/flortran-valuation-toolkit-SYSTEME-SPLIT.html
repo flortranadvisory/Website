@@ -1,22 +1,14 @@
 <!--
-  FLORTRAN — SPLIT FOR SYSTEME (see INSTRUCTIONS-FIX-CODE-NOT-VALID.md)
-  Copy each labeled block to its place: Header → Settings → Header, Raw → Raw HTML element, Footer → Settings → Footer
+  FLORTRAN — SINGLE PASTE ALTERNATIVE: If 3-step is confusing, use the SINGLE file: flortran-valuation-toolkit-SINGLE-PASTE.html
+  It contains <style> + HTML + <script> in ONE paste and has NO forbidden <html>/<head>/<body>/<footer> tags.
+  Paste SINGLE file into Raw HTML — it is self-contained and matches website + mobile.
 -->
 
-<!-- ===================== STEP 1: HEADER ===================== -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+<!-- For 3-step method: Header / Raw / Footer -->
+<!-- HEADER -->
 <style>
- is stripped: paste <style> block into Settings → Header code, body into Raw HTML)
-  3. Replace the fallback <form> inside .systeme-form-wrap with your Systeme.io embed:
-     <script src="https://flortranadvisory.systeme.io/public/remote/page/YOUR_ID.js"></script>
-  4. Delete the fallback form — leads then go to Systeme.io → Contacts → Automation.
-
-  COPY IS VERBATIM PER BRIEF — headline, sub, 3 toolkit items, First Name / Email / GET THE FREE TOOLKIT.
--->
-<style>
-  :root{
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap');
+:root{
     --gold:#C49A2A; --gold-light:#E8C55A; --gold-muted:#A07E22;
     --navy:#0E1A2B; --navy-mid:#162338; --navy-light:#1E3050;
     --cream:#FAF7F2; --cream-dark:#F0EBE0; --white:#fff;
@@ -265,38 +257,17 @@
     .proof-bar{justify-content:center; text-align:center}
   }
 
-
-/* ——— SYSTEME.IO FORM: make injected Systeme inputs match Flortran fallback ——— */
+/* Systeme injected form — match Flortran fallback */
 #systeme-form-wrap form{margin:0}
-#systeme-form-wrap label{
-  display:block; font-size:.82rem; font-weight:700; color:var(--navy); margin-bottom:7px; letter-spacing:.01em;
-}
-#systeme-form-wrap input[type="text"],
-#systeme-form-wrap input[type="email"],
-#systeme-form-wrap input[type="name"]{
-  width:100%; padding:13px 14px; border-radius:8px; border:1.5px solid rgba(14,26,43,.14);
-  background:var(--cream); font-family:var(--font-body); font-size:.95rem; color:var(--navy);
-  transition:.2s; outline:none; margin-bottom:14px;
-}
-#systeme-form-wrap input::placeholder{color:var(--text-light)}
+#systeme-form-wrap label{display:block; font-size:.82rem; font-weight:700; color:var(--navy); margin-bottom:7px}
+#systeme-form-wrap input[type="text"],#systeme-form-wrap input[type="email"]{width:100%; padding:13px 14px; border-radius:8px; border:1.5px solid rgba(14,26,43,.14); background:var(--cream); font-family:var(--font-body); font-size:.95rem; color:var(--navy); outline:none; margin-bottom:14px}
 #systeme-form-wrap input:focus{border-color:var(--gold); background:#fff; box-shadow:0 0 0 3px rgba(196,154,42,.12)}
-#systeme-form-wrap button,
-#systeme-form-wrap [type="submit"],
-#systeme-form-wrap .btn,
-#systeme-form-wrap input[type="submit"]{
-  width:100%; display:inline-flex; align-items:center; justify-content:center; gap:10px;
-  background:var(--gold); color:#fff; border:1.5px solid var(--gold);
-  padding:15px 22px; border-radius:8px; font-family:var(--font-body); font-size:.95rem; font-weight:800;
-  letter-spacing:.06em; text-transform:uppercase; cursor:pointer; transition:.25s var(--ease-out);
-  box-shadow:var(--shadow-gold); margin-top:6px;
-}
-#systeme-form-wrap button:hover,
-#systeme-form-wrap [type="submit"]:hover{ background:var(--gold-muted); border-color:var(--gold-muted); transform:translateY(-1px); }
+#systeme-form-wrap button,#systeme-form-wrap [type="submit"]{width:100%; display:inline-flex; align-items:center; justify-content:center; gap:10px; background:var(--gold); color:#fff; border:1.5px solid var(--gold); padding:15px 22px; border-radius:8px; font-family:var(--font-body); font-size:.95rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; box-shadow:var(--shadow-gold); margin-top:6px}
+#systeme-form-wrap button:hover{ background:var(--gold-muted); border-color:var(--gold-muted); transform:translateY(-1px); }
 
 </style>
 
-
-<!-- ===================== STEP 2: RAW HTML (paste only this) ===================== -->
+<!-- RAW -->
 <div class="fl-topbar">
   <a class="fl-logo" href="https://www.flortran.com" target="_blank" rel="noopener" aria-label="Flortran home">
     <img src="https://www.flortran.com/flortran-logo-header.png" alt="Flortran" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex'">
@@ -516,11 +487,9 @@
     </div>
   </div>
 </div>
-
-<!-- ===================== STEP 3: FOOTER ===================== -->
+<!-- FOOTER -->
 <script>
-
-  // ——— Fallback form: replace this with Systeme.io script when ready ———
+// ——— Fallback form: replace this with Systeme.io script when ready ———
   (function(){
     const form = document.getElementById('toolkit-form');
     const err = document.getElementById('form-error');
@@ -555,6 +524,4 @@
     });
     obs.observe(document.body, {childList:true, subtree:true});
   })();
-
 </script>
-
