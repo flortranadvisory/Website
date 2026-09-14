@@ -259,4 +259,32 @@
     .proof-bar{justify-content:center; text-align:center}
   }
 
+
+/* ——— SYSTEME.IO FORM: make injected Systeme inputs match Flortran fallback ——— */
+#systeme-form-wrap form{margin:0}
+#systeme-form-wrap label{
+  display:block; font-size:.82rem; font-weight:700; color:var(--navy); margin-bottom:7px; letter-spacing:.01em;
+}
+#systeme-form-wrap input[type="text"],
+#systeme-form-wrap input[type="email"],
+#systeme-form-wrap input[type="name"]{
+  width:100%; padding:13px 14px; border-radius:8px; border:1.5px solid rgba(14,26,43,.14);
+  background:var(--cream); font-family:var(--font-body); font-size:.95rem; color:var(--navy);
+  transition:.2s; outline:none; margin-bottom:14px;
+}
+#systeme-form-wrap input::placeholder{color:var(--text-light)}
+#systeme-form-wrap input:focus{border-color:var(--gold); background:#fff; box-shadow:0 0 0 3px rgba(196,154,42,.12)}
+#systeme-form-wrap button,
+#systeme-form-wrap [type="submit"],
+#systeme-form-wrap .btn,
+#systeme-form-wrap input[type="submit"]{
+  width:100%; display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  background:var(--gold); color:#fff; border:1.5px solid var(--gold);
+  padding:15px 22px; border-radius:8px; font-family:var(--font-body); font-size:.95rem; font-weight:800;
+  letter-spacing:.06em; text-transform:uppercase; cursor:pointer; transition:.25s var(--ease-out);
+  box-shadow:var(--shadow-gold); margin-top:6px;
+}
+#systeme-form-wrap button:hover,
+#systeme-form-wrap [type="submit"]:hover{ background:var(--gold-muted); border-color:var(--gold-muted); transform:translateY(-1px); }
+
 </style>
